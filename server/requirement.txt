@@ -1,0 +1,5 @@
+Flask==2.2.2
+Flask-SQLAlchemy
+validators==0.20.0
+psycopg2==2.9.5
+flask-jwt-extended
