@@ -1,5 +1,9 @@
-Flask==2.2.2
+Flask
 Flask-SQLAlchemy
-validators==0.20.0
-psycopg2==2.9.5
+validators
+psycopg2
+mysqlclient
 flask-jwt-extended
+python-dotenv
+
+
