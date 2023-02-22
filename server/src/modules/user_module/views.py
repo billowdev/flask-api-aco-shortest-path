@@ -1,6 +1,5 @@
 from flask import jsonify, request, current_app
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_401_UNAUTHORIZED
-
 from src.utils.password_hasher import verify_password
 from . import user_bp
 from src.modules.user_module.models import UserModel
@@ -47,8 +46,8 @@ def login():
     if user:
         is_pass_correct = verify_password(user.password_hash, password)
         if is_pass_correct:
-            refresh_token: str = create_access_token(identity=user.id)
-            access_token: str = create_access_token(identity=user.id)
+            refresh_token: str = create_access_token(identity=user.id, additional_claims={'role': user.role.value})
+            access_token: str = create_access_token(identity=user.id, additional_claims={'role': user.role.value})
 
             return jsonify({
                 'user': {

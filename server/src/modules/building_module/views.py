@@ -1,52 +1,37 @@
 from src.constatns.common_constant import ENDPOINT
-from flask import jsonify
+from flask import jsonify, request
 from src.modules.building_module.models import BuildingModel
 from . import building_bp
+from flask_jwt_extended import jwt_required
 
 
 @building_bp.route("/", methods=["GET"])
 def handle_get_buildings():
-    locations = [
-        {
-            "name": "A7",
-            "desc": "ตึก 7",
-            "lat": 17.191058760990806,
-            "lng": 104.0894708420397,
-        },
-        {
-            "name": "A9",
-            "desc": "ตึก 9",
-            "lat": 17.190634027635916,
-            "lng": 104.09040683236034
-        },
-        {
-            "name": "A6",
-            "desc": "ตึก 6",
-            "lat": 17.190970159860075,
-            "lng":  104.08848902422882
-        },
-        {
-            "name": "C4",
-            "desc": "แยกเนเซี่ยม",
-            "lat": 17.189400286942945,
-            "lng":  104.09174171837972
-        },
-        {
-            "name": "C5",
-            "desc": "ทางสามแยกทางเข้าครุศาสตร์",
-            "lat": 17.188738469975437,
-            "lng":  104.09137406371342
-        },
-        {
-            "name": "C1",
-            "desc": "หน้าอาคาร 1 ทางเข้าอาคารครุศาสตร์",
-            "lat": 17.189578289590823,
-            "lng":  104.09041195449454
-        }
-
-    ]
+    buildings = BuildingModel.query()
+    data: list = []
+    for building in buildings:
+        data.append({
+            'id': building.id,
+            'name': building.name,
+            'bid': building.bid,
+            'desc': building.desc,
+            'lat': building.lat,
+            'lng': building.lng,
+        })
 
     return jsonify({
         "msg": "get building successfully",
-        "paylolad": locations
+        "paylolad": data
+    })
+
+
+@building_bp.route("/create", methods=["POST"])
+@jwt_required
+def handle_get_buildings():
+    data = request.get_json()
+    # username = data.get('username')
+    
+    return jsonify({
+        "msg": "create building successfully",
+        "paylolad": data
     })

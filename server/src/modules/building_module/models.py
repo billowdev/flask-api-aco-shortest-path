@@ -6,10 +6,11 @@ class BuildingModel(db.Model):
 	__tablename__ = 'buildings'
  
 	id = db.Column(db.Integer, primary_key=True)
+	bid = db.Column(db.String(5), nullable=False, unique=True)
 	name = db.Column(db.Text, nullable=False)
 	desc = db.Column(db.Text, nullable=False)
-	lat = db.Column(db.Float, nullable=False)
-	lng = db.Column(db.Float, nullable=False)
+	lat = db.Column(db.Numeric(precision=18, scale=15), nullable=False)
+	lng = db.Column(db.Numeric(precision=18, scale=15), nullable=False)
 	created_at = db.Column(db.DateTime, default=datetime.datetime.now())
 	updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.now())
 

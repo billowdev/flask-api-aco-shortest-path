@@ -1,8 +1,9 @@
+from contextlib import suppress
 from flask import Flask
 from .utils.password_hasher import password_hasher, verify_password
 from .constatns.common_constant import ENDPOINT
 from .database.db_instance import db
-
+from .database.seeders import building_seeder
 from .modules.building_module import building_bp
 from .modules.user_module import user_bp
 from .config import common_config
@@ -64,12 +65,17 @@ def create_app():
                     db.session.execute(f"DROP TABLE IF EXISTS {table_name}")
             # create new tables
             db.create_all()
-            seeders.run_seed()
+            with suppress(BaseException):
+                seeders.run_seed()
         elif app.config['ENV'] == 'testing' and not app.testing:
             raise ValueError(
                 "Testing database can only be created when app is testing")
         else:
             db.create_all()
+            # seed the building table
+            with suppress(BaseException):
+                building_seeder.seed()
+
 			
     @app.get("/")
     def say_hello():
