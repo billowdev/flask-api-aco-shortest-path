@@ -3,6 +3,7 @@ import datetime
 from src.database.db_instance import db
 from enum import Enum
 
+
 class RolesEnum(Enum):
     USER = "USER"
     ADMIN = "ADMIN"
@@ -27,5 +28,8 @@ class UserModel(db.Model):
 			'id': self.id,
 			'username': self.username,
 			'email': self.email,
-			'role': self.role,
+			'role': self.role.value,
 		}
+	def is_admin(self):
+		return self.role == RolesEnum.ADMIN
+

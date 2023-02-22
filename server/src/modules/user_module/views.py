@@ -46,7 +46,7 @@ def login():
     if user:
         is_pass_correct = verify_password(user.password_hash, password)
         if is_pass_correct:
-            refresh_token: str = create_access_token(identity=user.id, additional_claims={'role': user.role.value})
+            refresh_token: str = create_refresh_token(identity=user.id, additional_claims={'role': user.role.value})
             access_token: str = create_access_token(identity=user.id, additional_claims={'role': user.role.value})
 
             return jsonify({
@@ -54,7 +54,8 @@ def login():
                     'refresh_token': refresh_token,
                     'access_token': access_token,
                     'username': user.username,
-                    'email': user.email
+                    'email': user.email,
+                    'role':user.role.value
                 }
             }), HTTP_200_OK
     return jsonify({
