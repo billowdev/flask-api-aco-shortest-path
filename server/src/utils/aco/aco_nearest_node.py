@@ -1,4 +1,4 @@
-from .ant_colony_optimizer import AntColonyOptimizer
+from src.utils.aco.ant_colony_optimizer import AntColonyOptimizer
 import numpy as np
 
 my_locations = [
@@ -52,7 +52,7 @@ def distance(loc1, loc2):
 	return np.sqrt((loc1['lat'] - loc2['lat'])**2 + (loc1['lng'] - loc2['lng'])**2)
 
 # Define the ACO algorithm
-def find_nearest_location(locations, current_node):
+def aco_nearest_node(locations, current_node):
 	# Set up the ACO parameters
 	num_ants = 10
 	evaporation_rate = 0.1
@@ -73,7 +73,7 @@ def find_nearest_location(locations, current_node):
 
 	# Find the index of the current node
 	current_node_index = [i for i, loc in enumerate(locations) if loc['bid'] == current_node][0]
-
+	print(current_node_index)
 	# Set up the ACO optimizer
 	aco = AntColonyOptimizer(num_ants=num_ants,
 							 evaporation_rate=evaporation_rate,
@@ -92,5 +92,5 @@ def find_nearest_location(locations, current_node):
 	return locations[nearest_location_index]['bid']
 
 
-a = find_nearest_location(my_locations, "C1")
+a = aco_nearest_node(my_locations, "C1")
 print(a)

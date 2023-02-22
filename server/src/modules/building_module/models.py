@@ -36,11 +36,13 @@ class BuildingModel(db.Model):
 	def to_dict(self):
 		return {
 			'id': self.id,
+			'bid': self.bid,
 			'name': self.name,
 			'desc': self.desc,
 			'lat': self.lat,
 			'lng': self.lng,
 		}
+
 	"""
 	The to_dict() function in the BuildingModel class is a method that returns a 
 	dictionary representation of a BuildingModel object.

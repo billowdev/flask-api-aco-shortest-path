@@ -39,24 +39,26 @@ def create_app():
     else:
         raise ValueError(f"Unknown environment: {app.config['ENV']}")
     # ensure the instance folder exists
-
+    
     db.app = app
     db.init_app(app)
     JWTManager(app)
     
-    app.config['MAIL_SERVER'] = common_config('MAIL_SERVER')
-    app.config['MAIL_PORT'] = int(common_config('MAIL_PORT'))
-    app.config['MAIL_USE_TLS'] = common_config('MAIL_USE_TLS').lower() in ('true', '1', 'yes')
-    app.config['MAIL_USERNAME'] = common_config('MAIL_USERNAME')
-    app.config['MAIL_PASSWORD'] = common_config('MAIL_PASSWORD')
-    app.config['MAIL_DEFAULT_SENDER'] = common_config('MAIL_DEFAULT_SENDER')
-    
     app.register_blueprint(building_bp)
     app.register_blueprint(user_bp)
-    
-    
-    Mail.init_app(app)
-    
+
+    Mail().init_app(app)
+    app.config.from_mapping(
+            MAIL_SERVER=common_config.MAIL_SERVER,
+            MAIL_PORT=common_config.MAIL_PORT,
+            MAIL_USE_TLS=common_config.MAIL_USE_TLS,
+            MAIL_USERNAME=common_config.MAIL_USERNAME,
+            MAIL_PASSWORD=common_config.MAIL_PASSWORD,
+            MAIL_DEFAULT_SENDER=common_config.MAIL_DEFAULT_SENDER,
+    )
+
+
+
     # create database tables
     with app.app_context():
         if app.config['ENV'] == 'development':
@@ -78,7 +80,7 @@ def create_app():
             with suppress(BaseException):
                 building_seeder.seed()
 
-			
+            
     @app.get("/")
     def say_hello():
         return {"message": "Hello World", "test": app.config['ENV']}

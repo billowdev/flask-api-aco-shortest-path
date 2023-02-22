@@ -2,9 +2,79 @@ from flask import jsonify, request
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 from src.modules.building_module.models import BuildingModel
 from src.modules.user_module.models import UserModel
+from src.utils.aco.aco_nearest_node import aco_nearest_node
+from src.utils.aco.aco_shourtest_path import aco_shortest_path
 from . import building_bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.database.db_instance import db
+
+
+@building_bp.post("/navigate")
+def handle_navigate_building():
+    payload = request.get_json().get('payload', '')
+    try:
+        if 'bid_start' in payload and 'bid_goal' in payload:
+            bid_start = payload['bid_start']
+            bid_goal = payload['bid_goal']
+            # print(bid_start, bid_goal)
+            raw_buildings = BuildingModel.query.all()
+            buildings = []
+            for each_building in range(len(raw_buildings)):
+                buildings.append(raw_buildings[each_building].to_dict())
+
+            # print(buildings)
+            # buildings = buildings
+            # use aco to find best path
+            aco_navigation_path = aco_shortest_path(
+                buildings, bid_start, bid_goal)
+
+            return jsonify({
+                'message': 'Building navigate successfully',
+                'payload': {
+                    "from_start":bid_start,
+                    "to_goal":bid_goal,
+                    "distance": aco_navigation_path['distance'],
+                    "best_path":aco_navigation_path['best_path']
+                }
+            }), HTTP_200_OK
+        else:
+            return jsonify({'message': 'bid_start or bid_goal is required'}), HTTP_400_BAD_REQUEST
+    except BaseException as e:
+        return jsonify({'message': 'navigate to building was failed'}), HTTP_400_BAD_REQUEST
+
+
+@building_bp.post("/nearest")
+def handle_nearest_building():
+    payload = request.get_json().get('payload', '')
+    try:
+        if 'present_lat' in payload and 'present_lng' in payload:
+            present_lat = payload['present_lat']
+            present_lng = payload['present_lng']
+
+            raw_buildings = BuildingModel.query.all()
+            buildings = []
+            for each_building in range(len(raw_buildings)):
+                buildings.append(raw_buildings[each_building].to_dict())
+
+
+            # buildings = buildings
+            # use aco to find best path
+            aco_nearest = aco_nearest_node(
+                buildings, bid_start, bid_goal)
+
+            return jsonify({
+                'message': 'Building navigate successfully',
+                'payload': {
+                    "from_start":bid_start,
+                    "to_goal":bid_goal,
+                    "distance": aco_navigation_path['distance'],
+                    "best_path":aco_navigation_path['best_path']
+                }
+            }), HTTP_200_OK
+        else:
+            return jsonify({'message': 'bid_start or bid_goal is required'}), HTTP_400_BAD_REQUEST
+    except BaseException as e:
+        return jsonify({'message': 'navigate to building was failed'}), HTTP_400_BAD_REQUEST
 
 
 @building_bp.route("/get", methods=["GET"])
@@ -71,7 +141,7 @@ def handle_create_buildings():
     return jsonify({'message': 'Welcome, admin!'}), HTTP_200_OK
 
 
-@building_bp.route("/<int:building_id>", methods=['PUT', 'PATCH'])
+@building_bp.route("/update/<int:building_id>", methods=['PUT', 'PATCH'])
 @jwt_required()
 def handle_update_building(building_id):
     current_user_id = get_jwt_identity()

@@ -6,8 +6,8 @@ from . import user_bp
 from src.modules.user_module.models import UserModel
 from src.database.db_instance import db
 from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token
-from flask_mail import Message
-from src import mail
+from flask_mail import Message, Mail
+
 
 @user_bp.route('/users', methods=['GET'])
 def get_users():
@@ -41,7 +41,7 @@ def send_reset_email(user, reset_token):
 
     # Create and send the email message
     message = Message(subject='Password Reset Request', recipients=[user.email], body=message_body)
-    mail.send(message)
+    Mail.send(message)
 
 @user_bp.post('/login')
 def login():
