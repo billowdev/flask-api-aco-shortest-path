@@ -4,3 +4,11 @@ export SQLALCHEMY_DB_URI_TEST=mysql+pymysql://yourusername:yourpassword@localhos
 
 export SECRET_KEY=your-secret-key-here
 export JWT_KEY=YOUR_JWT_KEY
+
+
+MAIL_SERVER = 'email-smtp.us-east-1.amazonaws.com'
+MAIL_PORT = 587
+MAIL_USE_TLS = True
+MAIL_USERNAME = 'your_ses_smtp_username'
+MAIL_PASSWORD = 'your_ses_smtp_password'
+MAIL_DEFAULT_SENDER = 'your_default_sender_email_address'

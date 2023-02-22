@@ -61,15 +61,7 @@ def seed():
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
-         {
-            "bid": "C2",
-            "name": "C2",
-            "desc": "หน้าอาคาร 2 ทางเข้าอาคารครุศาสตร์",
-            "lat": 17.189578289590823,
-            "lng":  104.09041195449454,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        }
+       
     ]
     for building in buildings:
         db.session.add(BuildingModel(**building))

@@ -13,7 +13,7 @@ def seed():
             'username': 'alice',
             'email': 'alice@gmail.com',
             'role': RolesEnum.USER,
-            'password_hash': seeder_pass,
+            'hash_password': seeder_pass,
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
@@ -21,7 +21,7 @@ def seed():
             'username': 'bob',
             'email': 'bob@gmail.com',
             'role': RolesEnum.USER,
-            'password_hash': seeder_pass,
+            'hash_password': seeder_pass,
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
@@ -29,7 +29,7 @@ def seed():
             'username': 'john',
             'email': 'john@gmail.com',
             'role': RolesEnum.ADMIN,
-            'password_hash': seeder_pass,
+            'hash_password': seeder_pass,
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },

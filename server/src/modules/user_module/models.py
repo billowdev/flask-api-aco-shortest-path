@@ -1,3 +1,4 @@
+import secrets
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 from src.database.db_instance import db
@@ -15,7 +16,7 @@ class UserModel(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), index=True, unique=True)
 	email = db.Column(db.String(120), index=True, unique=True)
-	password_hash = db.Column(db.String(128))
+	hash_password = db.Column(db.String(128))
 	role = db.Column(db.Enum(RolesEnum), nullable=False, default=RolesEnum.USER)
 	created_at = db.Column(db.DateTime, default=datetime.datetime.now())
 	updated_at = db.Column(db.DateTime, onupdate=datetime.datetime.now())
@@ -32,4 +33,23 @@ class UserModel(db.Model):
 		}
 	def is_admin(self):
 		return self.role == RolesEnum.ADMIN
+
+	def get_reset_token(self, expiration=600):
+		"""
+		Generate a reset token for the user with a given expiration time.
+
+		:param expiration: The expiration time of the token in seconds (default: 600 seconds).
+		:return: The reset token as a string.
+		"""
+		# Generate a random string for the token
+		reset_token = secrets.token_urlsafe(32)
+
+		# Set the reset token and expiration time in the user object
+		self.reset_token = reset_token
+		self.reset_token_expiration = datetime.datetime.utcnow() + datetime.timedelta(seconds=expiration)
+
+		# Commit the changes to the database
+		db.session.commit()
+
+		return reset_token
 

@@ -9,6 +9,7 @@ from .modules.user_module import user_bp
 from .config import common_config
 from .database.seeders import seeders
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 
 def create_app():
     app = Flask(__name__,instance_relative_config=True)
@@ -43,8 +44,18 @@ def create_app():
     db.init_app(app)
     JWTManager(app)
     
+    app.config['MAIL_SERVER'] = common_config('MAIL_SERVER')
+    app.config['MAIL_PORT'] = int(common_config('MAIL_PORT'))
+    app.config['MAIL_USE_TLS'] = common_config('MAIL_USE_TLS').lower() in ('true', '1', 'yes')
+    app.config['MAIL_USERNAME'] = common_config('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = common_config('MAIL_PASSWORD')
+    app.config['MAIL_DEFAULT_SENDER'] = common_config('MAIL_DEFAULT_SENDER')
+    
     app.register_blueprint(building_bp)
     app.register_blueprint(user_bp)
+    
+    
+    Mail.init_app(app)
     
     # create database tables
     with app.app_context():

@@ -1,7 +1,6 @@
 import argon2
 from src.config.common_config import SECRET_KEY
 
-
 def password_hasher(password):
 	hasher = argon2.PasswordHasher(
 		time_cost=16,

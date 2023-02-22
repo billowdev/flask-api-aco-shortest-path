@@ -2,12 +2,24 @@ import numpy as np
 
 class AntColonyOptimizer:
     def __init__(self, num_ants, evaporation_rate, alpha, beta, q, graph):
+        """_summary_
+
+        Args:
+            num_ants (_type_): The number of ants in the algorithm
+            evaporation_rate (_type_): The rate of pheromone evaporation
+            alpha (_type_): A parameter that controls the importance of pheromone levels in the decision-making process of the ants
+            beta (_type_): A parameter that controls the importance of distance in the decision-making process of the ants
+            q (_type_): A parameter that represents the quantity of pheromone deposited by each ant
+            graph (_type_): A dictionary containing the graph data, including the distances between nodes
+        """
         self.num_ants = num_ants
         self.evaporation_rate = evaporation_rate
         self.alpha = alpha
         self.beta = beta
         self.q = q
         self.graph = graph
+        # initializes the pheromone matrix with values of 1 for each element,
+        # and divides the matrix by the number of nodes in the graph to get the initial pheromone concentration.
         self.pheromone = np.ones_like(graph['distances']) / len(graph['distances'])
 
     def run(self, start_node, iterations):
