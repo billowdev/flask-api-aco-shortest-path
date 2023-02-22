@@ -1,6 +1,4 @@
 from flask import Flask
-import os
-
 from .utils.password_hasher import password_hasher, verify_password
 from .constatns.common_constant import ENDPOINT
 from .database.db_instance import db
@@ -9,6 +7,7 @@ from .modules.building_module import building_bp
 from .modules.user_module import user_bp
 from .config import common_config
 from .database.seeders import seeders
+from flask_jwt_extended import JWTManager
 
 def create_app():
     app = Flask(__name__,
@@ -26,28 +25,32 @@ def create_app():
     # set up database URI based on the environment
     if app.config['ENV'] == 'development':
         app.config.from_mapping(
+            SECRET_KEY=common_config.SECRET_KEY,
             SQLALCHEMY_DATABASE_URI=common_config.SQLALCHEMY_DB_URI_DEV,
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
-            # JWT_SECRET_KEY=os.environ.get('JWT_SECRET_KEY')
+            JWT_SECRET_KEY=common_config.JWT_SECRET_KEY
         )
     elif app.config['ENV'] == 'production':
         app.config.from_mapping(
+            SECRET_KEY=common_config.SECRET_KEY,
             SQLALCHEMY_DATABASE_URI=common_config.SQLALCHEMY_DB_URI_PROD,
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
-            # JWT_SECRET_KEY=os.environ.get('JWT_SECRET_KEY')
+            JWT_SECRET_KEY=common_config.JWT_SECRET_KEY
         )
     elif app.config['ENV'] == 'testing':
         app.config.from_mapping(
+            SECRET_KEY=common_config.SECRET_KEY,
             SQLALCHEMY_DATABASE_URI=common_config.SQLALCHEMY_DB_URI_TEST,
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
-            # JWT_SECRET_KEY=os.environ.get('JWT_SECRET_KEY')
+            JWT_SECRET_KEY=common_config.JWT_SECRET_KEY
         )
     else:
         raise ValueError(f"Unknown environment: {app.config['ENV']}")
     # ensure the instance folder exists
 
-    # db.app = app
+    db.app = app
     db.init_app(app)
+    JWTManager(app)
 
     app.register_blueprint(building_bp)
     app.register_blueprint(user_bp)
@@ -70,11 +73,6 @@ def create_app():
 			
     @app.get("/")
     def say_hello():
-        password = "mysecretpassword"
-        password2 = "mysecretpassword2"
-        hash_p = password_hasher(password)
-        print(hash_p)
-        verify_password(password2, hash_p)
         return {"message": "Hello World", "test": app.config['ENV']}
 
     return app
