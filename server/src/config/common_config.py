@@ -1,0 +1,5 @@
+from os import environ
+SECRET_KEY = environ.get("SECRET_KEY")
+SQLALCHEMY_DB_URI_DEV = environ.get("SQLALCHEMY_DB_URI_DEV")
+SQLALCHEMY_DB_URI_PROD = environ.get("SQLALCHEMY_DB_URI_PROD")
+SQLALCHEMY_DB_URI_TEST = environ.get("SQLALCHEMY_DB_URI_TEST")
