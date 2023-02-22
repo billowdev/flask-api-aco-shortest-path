@@ -1,0 +1,6 @@
+export SQLALCHEMY_DB_URI_DEV=mysql+pymysql://yourusername:yourpassword@localhost/yourdatabase_dev
+export SQLALCHEMY_DB_URI_PROD=mysql+pymysql://yourusername:yourpassword@localhost/yourdatabase_prod
+export SQLALCHEMY_DB_URI_TEST=mysql+pymysql://yourusername:yourpassword@localhost/yourdatabase_test
+
+export SECRET_KEY=your-secret-key-here
+export JWT_KEY=YOUR_JWT_KEY
