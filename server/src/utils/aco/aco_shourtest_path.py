@@ -13,7 +13,17 @@ def aco_shortest_path(locations, req_start, req_goal):
             req_start (_type_): start location
             req_goal (_type_): goal location
     """
+    """การทำงานของฟังก์ชัน
+    ฟังก์ชันนี้ต้องการ อากิวเมนต์ locations, req_start, และ req_goal
+    เป็นฟังก์ชันในการใช้ แอนต์โคโรนี อัลกอริทึมในการหา เส้นทางที่สั้นที่สุด
+
+    """
     # Define the distance matrix
+    """
+        กำหนดตัวแปร distances เพื่อเก็บระยะทางระหว่างสถานที่แต่ละคู่
+        
+        การ loop สองชั้นดังโค้ดด้านล่างเป็นการ วนซ้ำทุกตำแหน่งแล้วคำนวณหาระยะห่างระหว่างสถานที่
+    """
     distances = []
     for i in range(len(locations)):
         row = []

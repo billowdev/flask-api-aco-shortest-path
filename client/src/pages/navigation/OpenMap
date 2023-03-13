@@ -1,0 +1,112 @@
+// import { LatLng, LatLngExpression } from 'leaflet';
+// import { Popup } from 'react-leaflet';
+// import { useEffect, useState } from 'react';
+// import L from 'leaflet';
+// import 'leaflet-routing-machine';
+// import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+
+// import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet';
+
+// type NavigationArrayType = {
+// 	bid: string;
+// 	lat: string;
+// 	lng: string;
+// }[];
+
+// const OpenMap = () => {
+// 	useEffect(() => {
+// 		navigator.geolocation.getCurrentPosition(
+// 			position =>
+// 				setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+// 			error => console.log(error)
+// 		);
+// 	}, []);
+// 	const [currentPosition, setCurrentPosition] = useState<[number, number]>([
+// 		17.190288083683313,
+// 		104.08966681657408,
+// 	]);
+
+// 	const navigation: NavigationArrayType = [
+// 		{
+// 			bid: 'ห้องสมุด',
+// 			lat: '17.190288083683313',
+// 			lng: '104.08966681657408',
+// 		},
+// 		{
+// 			bid: 'A7',
+// 			lat: '17.191058760990806',
+// 			lng: '104.089470842039700',
+// 		},
+// 		{
+// 			bid: 'ทางม้าลายหน้าวิถีธรรม',
+// 			lat: '17.19068394216775',
+// 			lng: '104.08931437874037',
+// 		},
+// 		{
+// 			bid: 'สี่แยกตึก 7',
+// 			lat: '17.19094805961972',
+// 			lng: '104.0889019354797',
+// 		},
+// 		{
+// 			bid: 'สี่แยกประตู 4',
+// 			lat: '17.191467181153428',
+// 			lng: '104.08782886919505',
+// 		},
+// 		{
+// 			bid: 'ประตู 4',
+// 			lat: '17.19166690404063',
+// 			lng: '104.0874537747859',
+// 		},
+// 		{
+// 			bid: 'ร้านข้าว',
+// 			lat: '17.19182546768998',
+// 			lng: '104.08730483913511',
+// 		},
+// 	];
+
+// 	const [route, setRoute] = useState<L.Routing.Control | null>(null);
+
+// 	useEffect(() => {
+// 		const map = L.map('map');
+
+// 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// 			attribution: 'OpenStreetMap',
+// 		}).addTo(map);
+
+// 		const routing = L.Routing.control({
+// 			waypoints: [
+// 				L.latLng(currentPosition[0], currentPosition[1]),
+// 				L.latLng(parseFloat(navigation[navigation.length - 1].lat), parseFloat(navigation[navigation.length - 1].lng)),
+// 			],
+// 			router: new L.Routing.OSRMv1({
+// 				serviceUrl: 'http://router.project-osrm.org/route/v1',
+// 			}),
+// 		});
+
+// 		routing.addTo(map);
+
+// 		setRoute(routing);
+
+// 		return () => {
+// 			map.remove();
+// 			routing.getPlan().setWaypoints([]);
+// 		};
+// 	}, [currentPosition, navigation]);
+
+// 	return (
+// 		<>
+// 			<div id="map" style={{ height: '100vh' }} />
+// 			<MapContainer center={[currentPosition[0], currentPosition[1]]} zoom={13} scrollWheelZoom={false}>
+// 				<TileLayer
+// 					attribution='&amp;copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+// 					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+// 				/>
+// 				<Marker position={[currentPosition[0], currentPosition[1]]}>
+// 					<Popup>
+// 						Your current location.
+// 					</Popup>
+// 				</Marker>
+// 			</MapContainer>
+// 		</>
+// 	);
+// }

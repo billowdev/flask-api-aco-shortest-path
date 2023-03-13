@@ -1,6 +1,6 @@
 import { LatLng, LatLngExpression } from 'leaflet';
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
 type NavigationArrayType = {
 	bid: string;
 	lat: string;
@@ -69,8 +69,16 @@ const MapComponent: React.FC<MapProps> = ({ navigation }) => {
 	return (
 		<MapContainer center={from_start} zoom={15}>
 			<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-			<Marker position={from_start} />
-			<Marker position={goal} />
+			<Marker position={from_start}>
+				<Popup>
+					Your current location.
+				</Popup>
+			</Marker>
+			<Marker position={goal}>
+				<Popup>
+					our goal location.
+				</Popup>
+			</Marker>
 			<Polyline pathOptions={{ color: 'blue' }} positions={path} />
 		</MapContainer>
 	);
