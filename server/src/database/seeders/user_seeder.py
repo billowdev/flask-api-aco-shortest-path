@@ -6,7 +6,6 @@ from datetime import datetime
 
 seeder_pass = password_hasher("test1234")
 
-
 def seed():
     users = [
         {

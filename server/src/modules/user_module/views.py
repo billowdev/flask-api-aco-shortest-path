@@ -45,9 +45,17 @@ def send_reset_email(user, reset_token):
 
 @user_bp.post('/login')
 def login():
-    email: str = request.json.get('email', '')
-    username: str = request.json.get('username', '')
-    password: str = request.json.get('password', '')
+    email, username, password = "", "", ""
+
+    if request.is_json:
+        email: str = request.json.get('email', '')
+        username: str = request.json.get('username', '')
+        password: str = request.json.get('password', '')
+    else:
+        email: str = request.form.get('email', '')
+        username: str = request.form.get('username', '')
+        password: str = request.form.get('password', '')
+    
     user: UserModel = {}
     if(email):
         user: UserModel = UserModel.query.filter_by(email=email).first()
@@ -101,7 +109,6 @@ def handle_create_user():
 
     try:
         data = request.get_json()
-        print()
         hashing = password_hasher(data['password'])
         new_user = UserModel(username=data['username'], email=data['email'], hash_password=hashing, role=data['role'])
         db.session.add(new_user)

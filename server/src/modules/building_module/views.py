@@ -1,4 +1,6 @@
+import decimal
 from flask import jsonify, request
+from src.constatns.http_status_codes import HTTP_201_CREATED
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 from src.modules.building_module.models import BuildingModel
 from src.modules.user_module.models import UserModel
@@ -31,10 +33,10 @@ def handle_navigate_building():
             return jsonify({
                 'message': 'Building navigate successfully',
                 'payload': {
-                    "from_start":bid_start,
-                    "to_goal":bid_goal,
+                    "from_start": bid_start,
+                    "to_goal": bid_goal,
                     "distance": aco_navigation_path['distance'],
-                    "best_path":aco_navigation_path['best_path']
+                    "best_path": aco_navigation_path['best_path']
                 }
             }), HTTP_200_OK
         else:
@@ -47,34 +49,32 @@ def handle_navigate_building():
 def handle_nearest_building():
     payload = request.get_json().get('payload', '')
     try:
-        if 'present_lat' in payload and 'present_lng' in payload:
-            present_lat = payload['present_lat']
-            present_lng = payload['present_lng']
-
+        if 'bid' in payload:
+            # present_lat = payload['present_lat']
+            # present_lng = payload['present_lng']
+            bid = payload['bid']
             raw_buildings = BuildingModel.query.all()
             buildings = []
             for each_building in range(len(raw_buildings)):
                 buildings.append(raw_buildings[each_building].to_dict())
 
-
             # buildings = buildings
             # use aco to find best path
             aco_nearest = aco_nearest_node(
-                buildings, bid_start, bid_goal)
-
+                 buildings, bid)
+            # print(aco_nearest)
             return jsonify({
                 'message': 'Building navigate successfully',
                 'payload': {
-                    "from_start":bid_start,
-                    "to_goal":bid_goal,
-                    "distance": aco_navigation_path['distance'],
-                    "best_path":aco_navigation_path['best_path']
+                    "nearest_building": aco_nearest,
+                     # "aco_nearest": aco_nearest,
                 }
             }), HTTP_200_OK
         else:
-            return jsonify({'message': 'bid_start or bid_goal is required'}), HTTP_400_BAD_REQUEST
+            return jsonify({'message': 'present_lat or present_lng is required or something went wrong'}), HTTP_400_BAD_REQUEST
     except BaseException as e:
-        return jsonify({'message': 'navigate to building was failed'}), HTTP_400_BAD_REQUEST
+        print(e)
+        return jsonify({'message': 'find nearest building was failed'}), HTTP_400_BAD_REQUEST
 
 
 @building_bp.route("/get", methods=["GET"])
@@ -124,6 +124,7 @@ def handle_create_buildings():
         )
         db.session.add(building)
         db.session.commit()
+        return jsonify({'message': 'Building was created successfully', 'payload': building.to_dict()}), HTTP_201_CREATED
     except KeyError as e:
         key_error = ['bid', 'name', 'desc', 'lat', 'lng']
         if str(e)[1:-1] in key_error:
@@ -133,12 +134,11 @@ def handle_create_buildings():
         return jsonify({'message': f'create building was failed that {str(e)[1:-1]} key error'}), HTTP_400_BAD_REQUEST
     except BaseException as e:
         print("other exception occurred")
+        print(e)
         # if(e == 'desc'):
         #     print("erorr - desc")
 
         return jsonify({'message': 'create building was failed'}), HTTP_400_BAD_REQUEST
-
-    return jsonify({'message': 'Welcome, admin!'}), HTTP_200_OK
 
 
 @building_bp.route("/update/<int:building_id>", methods=['PUT', 'PATCH'])

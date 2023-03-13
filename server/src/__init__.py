@@ -1,7 +1,6 @@
 from contextlib import suppress
 from flask import Flask, render_template
 from .utils.password_hasher import password_hasher, verify_password
-from .constatns.common_constant import ENDPOINT
 from .database.db_instance import db
 from .database.seeders import building_seeder
 from .modules.building_module import building_bp
@@ -82,12 +81,16 @@ def create_app():
                 building_seeder.seed()
 
             
-    @app.get("/")
-    def say_hello():
-        return {"message": "Hello World", "test": app.config['ENV']}
+    # @app.get("/")
+    # def say_hello():
+    #     return {"message": "Hello World", "test": app.config['ENV']}
 
-    @app.get("/test")
+    @app.get("/")
     def test_template():
         return render_template('index.html')
+    
+    @app.get("/login")
+    def login():
+        return render_template('login.html')
 
     return app
