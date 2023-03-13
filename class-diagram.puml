@@ -1,0 +1,45 @@
+@startuml
+
+package "Class Diagram  of SNRU Navigation System" {
+
+class UserAccount {
+    - id : string
+    - name : string
+    - surname : string
+    - username : string
+    - password : string
+    - role : RoleEnum
+
+        + getOne() : object
+        + getAll() : object
+        + create() : object
+        + update() : void
+        + delete() : void
+}
+
+Enum RoleEnum {
+    - Admin
+    - User
+}
+
+class Building {
+    - id : string
+    - name : string
+    - desc : string
+    - lat : decimal
+    - lng : decimal
+
+    + getOne() : object
+    + getAll() : object
+    + create() : object
+    + update() : void
+    + delete() : void
+}
+
+}
+
+
+UserAccount -- RoleEnum : "has"
+
+
+@enduml

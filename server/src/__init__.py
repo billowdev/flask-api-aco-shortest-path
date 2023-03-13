@@ -1,5 +1,5 @@
 from contextlib import suppress
-from flask import Flask
+from flask import Flask, render_template
 from .utils.password_hasher import password_hasher, verify_password
 from .constatns.common_constant import ENDPOINT
 from .database.db_instance import db
@@ -10,9 +10,12 @@ from .config import common_config
 from .database.seeders import seeders
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
-
+from os import path
 def create_app():
-    app = Flask(__name__,instance_relative_config=True)
+    template_dir = path.dirname(path.abspath(path.dirname(__file__)))
+    template_dir = path.join(template_dir, 'src', 'templates')
+
+    app = Flask(__name__,instance_relative_config=True, template_folder = template_dir)
 
     # set up database URI based on the environment
     if app.config['ENV'] == 'development':
@@ -57,8 +60,6 @@ def create_app():
             MAIL_DEFAULT_SENDER=common_config.MAIL_DEFAULT_SENDER,
     )
 
-
-
     # create database tables
     with app.app_context():
         if app.config['ENV'] == 'development':
@@ -84,5 +85,9 @@ def create_app():
     @app.get("/")
     def say_hello():
         return {"message": "Hello World", "test": app.config['ENV']}
+
+    @app.get("/test")
+    def test_template():
+        return render_template('index.html')
 
     return app

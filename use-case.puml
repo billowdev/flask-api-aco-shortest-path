@@ -1,0 +1,22 @@
+@startuml
+
+actor Admin
+actor User
+
+package "Use Case Diagram of SNRU Navigation System" {
+
+usecase Building
+usecase UserAccount
+usecase Navigation
+
+Admin -- UserAccount : "จัดการ"
+Admin -- Building : "จัดการ"
+
+Navigation -- User : "ใช้"
+
+Navigation ..> Building : "ประกอบไปด้วย"
+
+
+}
+
+@enduml
