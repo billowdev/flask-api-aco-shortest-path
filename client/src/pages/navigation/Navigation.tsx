@@ -18,38 +18,43 @@ const NavigationMap = () => {
 			error => console.log(error)
 		);
 	}, []);
-	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.191058760990806, 104.089470842039700]); // initialize with dummy values
+	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.190288083683313, 104.08966681657408]); // initialize with dummy values
 
 	const navigation: NavigationArrayType = [
+		{
+			bid: "ห้องสมุด",
+			lat: "17.190288083683313",
+			lng: "104.08966681657408",
+		},
 		{
 			bid: "A7",
 			lat: "17.191058760990806",
 			lng: "104.089470842039700",
 		},
 		{
-			bid: "A6",
-			lat: "17.190970159860075",
-			lng: "104.088489024228820",
+			bid: "ทางม้าลายหน้าวิถีธรรม",
+			lat: "17.19068394216775", 
+			lng: "104.08931437874037",
+		},
+			{
+			bid: "สี่แยกตึก 7",
+			lat: "17.19094805961972", 
+			lng: "104.0889019354797",
 		},
 		{
-			bid: "A9",
-			lat: "17.190634027635916",
-			lng: "104.090406832360340",
+			bid: "สี่แยกประตู 4",
+			lat: "17.191467181153428", 
+			lng: "104.08782886919505",
 		},
 		{
-			bid: "C1",
-			lat: "17.189578289590823",
-			lng: "104.090411954494540",
+			bid: "ประตู 4",
+			lat: "17.19166690404063", 
+			lng: "104.0874537747859",
 		},
 		{
-			bid: "C5",
-			lat: "17.188738469975437",
-			lng: "104.091374063713420",
-		},
-		{
-			bid: "C4",
-			lat: "17.189400286942945",
-			lng: "104.091741718379720",
+			bid: "ร้านข้าว",
+			lat: "17.19182546768998",
+			lng: "104.08730483913511",
 		},
 	];
 	// This function calculates the distance between two points using the Haversine formula
@@ -99,7 +104,7 @@ const NavigationMap = () => {
 
 
 	return (
-		<MapContainer center={new LatLng(from_start[0], from_start[1])} zoom={13}
+		<MapContainer center={new LatLng(from_start[0], from_start[1])} zoom={20}
 		style={{ height: '100vh' }}
 		>
 			<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
