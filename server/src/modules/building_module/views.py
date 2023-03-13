@@ -30,13 +30,26 @@ def handle_navigate_building():
             aco_navigation_path = aco_shortest_path(
                 buildings, bid_start, bid_goal)
 
+            best_path = aco_navigation_path['best_path']
+            navigate_data = []
+            for node in best_path:
+                building_model = BuildingModel.query.filter_by(bid=node).first()
+                building = building_model.to_dict()
+                navigate_data.append({
+                    'bid':building['bid'],
+                    'lat':building['lat'],
+                    'lng':building['lng'],
+                })
+                print(navigate_data)
+                
             return jsonify({
                 'message': 'Building navigate successfully',
                 'payload': {
                     "from_start": bid_start,
                     "to_goal": bid_goal,
                     "distance": aco_navigation_path['distance'],
-                    "best_path": aco_navigation_path['best_path']
+                    "best_path": aco_navigation_path['best_path'],
+                    "navigation":navigate_data
                 }
             }), HTTP_200_OK
         else:
