@@ -6,9 +6,10 @@ class BuildingModel(db.Model):
 	__tablename__ = 'buildings'
  
 	id = db.Column(db.Integer, primary_key=True)
-	bid = db.Column(db.String(5), nullable=False, unique=True)
+	bid = db.Column(db.String(10), nullable=False, unique=True)
 	name = db.Column(db.Text, nullable=False)
 	desc = db.Column(db.Text, nullable=False)
+	is_node = db.Column(db.Boolean, nullable=False, default=False)
 	lat = db.Column(db.Numeric(precision=18, scale=15), nullable=False)
 	lng = db.Column(db.Numeric(precision=18, scale=15), nullable=False)
 	created_at = db.Column(db.DateTime, default=datetime.datetime.now())
@@ -38,6 +39,7 @@ class BuildingModel(db.Model):
 			'id': self.id,
 			'bid': self.bid,
 			'name': self.name,
+			'is_node':self.is_node,
 			'desc': self.desc,
 			'lat': self.lat,
 			'lng': self.lng,

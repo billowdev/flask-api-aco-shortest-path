@@ -38,18 +38,40 @@ def handle_navigate_building():
                 navigate_data.append({
                     'bid':building['bid'],
                     'lat':building['lat'],
+                    'is_node':building['is_node'],
                     'lng':building['lng'],
                 })
-                print(navigate_data)
-                
+            # สกัดเอาแค่ โหนดเริ่มต้นจนถึงโหนดเป้าหมาย
+            new_best_path = []
+            for node in best_path:
+                if(node != bid_goal):
+                    new_best_path.append(node)
+                else:
+                    new_best_path.append(node)
+                    break
+            new_navigate_data = []
+            for node in navigate_data:
+                if(node['bid']!=bid_goal):
+                    new_navigate_data.append(node)
+                else:
+                    new_navigate_data.append(node)
+                    break
+            # create coordinates list
+            # print(navigate_data)
+            coordinates = []
+            for n in (new_navigate_data):
+                c = [float(n['lat']), float(n['lng'])]
+                coordinates.append(c)
+
             return jsonify({
                 'message': 'Building navigate successfully',
                 'payload': {
                     "from_start": bid_start,
                     "to_goal": bid_goal,
                     "distance": aco_navigation_path['distance'],
-                    "best_path": aco_navigation_path['best_path'],
-                    "navigation":navigate_data
+                    "best_path": new_best_path,
+                    "navigation":new_navigate_data,
+                    "coordinates": coordinates
                 }
             }), HTTP_200_OK
         else:
@@ -99,6 +121,7 @@ def handle_get_buildings():
             'id': building.id,
             'name': building.name,
             'bid': building.bid,
+            'is_node': building.is_node,
             'desc': building.desc,
             'lat': building.lat,
             'lng': building.lng,
@@ -175,6 +198,7 @@ def handle_update_building(building_id):
             building.bid = payload['bid']
             building.name = payload['name']
             building.desc = payload['desc']
+            building.is_node = payload['is_node']
             building.lat = payload['lat']
             building.lng = payload['lng']
         elif request.method == 'PATCH':
@@ -186,6 +210,8 @@ def handle_update_building(building_id):
                 building.desc = payload['desc']
             if 'lat' in payload:
                 building.lat = payload['lat']
+            if 'is_node' in payload:
+                building.is_node = payload['is_node']
             if 'lng' in payload:
                 building.lng = payload['lng']
         db.session.commit()
