@@ -18,8 +18,8 @@ def seed():
             "updated_at": datetime.now()
         },
           {
-            "bid": "G1L1",
-            "name": "โหนดเชื่อม G1L1",
+            "bid": "G1L01",
+            "name": "โหนดเชื่อม G1L01",
             "desc": "สามแยกโรงแรม ตรงประตู 1",
             "is_node": 0,
             "lat": 17.192329942043273, 
@@ -27,51 +27,22 @@ def seed():
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
+      
             {
-            "bid": "G1L2",
-            "name": "โหนดเชื่อม G1L2",
-            "desc": "G1L2",
-            "is_node": 0,
-            "lat":17.19239965864554, 
-            "lng":104.09356088792255,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        },
-        {
-            "bid": "G1L3",
-            "name": "โหนดเชื่อม G1L3",
-            "desc": "G1L3",
-            "is_node": 0,
-            "lat":17.192339303302465, 
-            "lng":104.09352685948282,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        },
-                  
-            {
-            "bid": "G1L4",
-            "name": "โหนดเชื่อม G1L4",
-            "desc": "G1L4",
+            "bid": "G1L02",
+            "name": "โหนดเชื่อม G1L02",
+            "desc": "G1L02",
             "is_node": 0,
               "lat":17.192205160723507, 
             "lng":104.0934495591739,
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
-                {
-            "bid": "G1L41",
-            "name": "โหนดเชื่อม G1L41",
-            "desc": "G1L41",
-            "is_node": 0,
-              "lat":17.19218641444562,
-            "lng": 104.09343628774235,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        },
+
                                 {
-            "bid": "G1L42",
-            "name": "โหนดเชื่อม G1L42",
-            "desc": "G1L42",
+            "bid": "G1L04",
+            "name": "โหนดเชื่อม G1L04",
+            "desc": "G1L04",
             "is_node": 0,
               "lat": 17.192176813324867,
             "lng":  104.09343275456074,
@@ -80,16 +51,7 @@ def seed():
         },
                 
                
-             {
-            "bid": "G1L5",
-            "name": "โหนดเชื่อม G1L5",
-            "desc": "G1L5",
-            "is_node": 0,
-              "lat":17.192144945154855, 
-            "lng":104.09341603156288,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        },
+
              {
             "bid": "G1L6",
             "name": "โหนดเชื่อม G1L6",
@@ -100,16 +62,7 @@ def seed():
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
-            {
-            "bid": "G1L7",
-            "name": "โหนดเชื่อม G1L7",
-            "desc": "G1L7",
-            "is_node": 0,
-              "lat":  17.191990494784445, 
-            "lng":104.09332642521102,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        },
+  
            {
             "bid": "G1L8",
             "name": "โหนดเชื่อม G1L8",
@@ -120,23 +73,14 @@ def seed():
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
-            {
-            "bid": "G1L9",
-            "name": "โหนดเชื่อม G1L9",
-            "desc": "สามแยกทางเข้าที่จอดรถตรงข้าม หอพระพุธรัชปัญญาบารมี",
-            "is_node": 0,
-              "lat": 17.19184946066179, 
-            "lng":104.09324710018069,
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        },
+   
                {
             "bid": "E1",
             "name": "หอพระพุทธรัชปัญญาบารมี",
             "desc": "หอพระพุทธรัชปัญญาบารมี",
             "is_node": 1,
-            "lat": 17.192138651499242, 
-            "lng":104.092790389835,
+            "lat":17.19182136195997, 
+            "lng":104.09317758265912,
             "created_at": datetime.now(),
             "updated_at": datetime.now()
         },
