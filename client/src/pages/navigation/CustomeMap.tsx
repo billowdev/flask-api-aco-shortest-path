@@ -12,10 +12,23 @@ type NavigationArrayType = {
 	is_node: boolean,
 }[];
 // const CustomNavigationMap = ({ currentPosition }: { currentPosition: number[] }) => {
-const NavigationMap = () => {
+const CustomNavigationMap = () => {
 	const dispatch: any = useAppDispatch();
-	const navigationList = useSelector(navigationSelector);
-	const [coordinates, setCoordinates] = useState([
+	const navigationList: any = useSelector(navigationSelector);
+
+	useEffect(() => {
+		dispatch(getNavigation({ start: "G1", goal: "C1" }));
+	}, [dispatch]);
+
+	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
+	// This function is called when the component mounts, and it gets the current location from the browser
+	// useEffect(() => {
+	// 	navigator.geolocation.getCurrentPosition(
+	// 		position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+	// 		error => console.log(error)
+	// 	);
+	// }, []);
+	const coordinates = [
 		[
 			17.19256404202556,
 			104.09360793646384
@@ -116,9 +129,35 @@ const NavigationMap = () => {
 			17.18940353583393,
 			104.09178602815216
 		]
-	])
+	];
+	useEffect(() => {
 
-	const [navigation, setNavigation] = useState<NavigationArrayType>([
+		let counter = 0;
+		const intervalId = setInterval(() => {
+			setCurrentPosition([coordinates[counter][0], coordinates[counter][1]]);
+			counter = (counter + 1) % coordinates.length;
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+
+
+	// useEffect(() => {
+	// 	setInterval(() => {
+	// 		setCurrentPosition([17.189578289590823, 104.090411954494540])
+
+	// 		setCurrentPosition([17.188738469975437, 104.091374063713420])
+
+	// 		setCurrentPosition([17.189400286942945, 104.091741718379720])
+
+	// 		setCurrentPosition([17.190634027635916, 104.090406832360340])
+	// 	}, 1000)
+
+	// }, [])
+
+
+
+	const navigation: NavigationArrayType = [
 
 		{
 			"bid": "G1",
@@ -271,50 +310,7 @@ const NavigationMap = () => {
 			"lng": "104.091786028152160"
 		}
 
-	])
-
-	useEffect(() => {
-		dispatch(getNavigation({ start: "G1", goal: "C1" }));
-
-	}, [dispatch,]);
-	useEffect(() => {
-		setCoordinates(navigationList.coordinates)
-		setNavigation(navigationList.navigation)
-	}, [navigationList.coordinates, navigationList.navigation])
-	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
-	// This function is called when the component mounts, and it gets the current location from the browser
-	// useEffect(() => {
-	// 	navigator.geolocation.getCurrentPosition(
-	// 		position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
-	// 		error => console.log(error)
-	// 	);
-	// }, []);
-	useEffect(() => {
-
-		let counter = 0;
-		const intervalId = setInterval(() => {
-			setCurrentPosition([coordinates[counter][0], coordinates[counter][1]]);
-			counter = (counter + 1) % coordinates.length;
-		}, 1000);
-
-		return () => clearInterval(intervalId);
-	}, []);
-
-
-	// useEffect(() => {
-	// 	setInterval(() => {
-	// 		setCurrentPosition([17.189578289590823, 104.090411954494540])
-
-	// 		setCurrentPosition([17.188738469975437, 104.091374063713420])
-
-	// 		setCurrentPosition([17.189400286942945, 104.091741718379720])
-
-	// 		setCurrentPosition([17.190634027635916, 104.090406832360340])
-	// 	}, 1000)
-
-	// }, [])
-
-
+	]
 	// This function calculates the distance between two points using the Haversine formula
 	const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
 		const R = 6371; // Radius of the earth in km
@@ -346,7 +342,7 @@ const NavigationMap = () => {
 
 	// This is the starting point (it can be replaced with the current position from GPS)
 	const from_start = currentPosition.length ? [currentPosition[0], currentPosition[1]] : [0, 0];
-	
+
 	// This is the goal (it can be any point in the navigation array)
 	const goal = [navigation[navigation.length - 1].lat, navigation[navigation.length - 1].lng];
 
@@ -391,4 +387,4 @@ const NavigationMap = () => {
 	);
 }
 
-export default NavigationMap;
+export default CustomNavigationMap;

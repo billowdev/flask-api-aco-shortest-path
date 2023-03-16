@@ -10,6 +10,9 @@ from .database.seeders import seeders
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from os import path
+from flask_cors import CORS
+
+
 def create_app():
     template_dir = path.dirname(path.abspath(path.dirname(__file__)))
     template_dir = path.join(template_dir, 'src', 'templates')
@@ -58,6 +61,8 @@ def create_app():
             MAIL_PASSWORD=common_config.MAIL_PASSWORD,
             MAIL_DEFAULT_SENDER=common_config.MAIL_DEFAULT_SENDER,
     )
+
+    CORS(app, resources={r"/api/v1/*": {"origins": "http://localhost:3000"}})
 
     # create database tables
     with app.app_context():
