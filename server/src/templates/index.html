@@ -1,12 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Navigation Applicaion</title>
-  </head>
-  <body>
-    <h1>Hello World !</h1>
-  </body>
+<html>
+<head>
+    <title>Navigation Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+
+<div id="mapid" style="height: 400px;"></div>
+
+<script>
+var coordinates = {{ payload.coordinates|safe }};
+var navigation = {{ payload.navigation|safe }};
+var fromStart = {{ payload.from_start|safe }};
+var toGoal = {{ payload.to_goal|safe }};
+
+var map = L.map('mapid').setView(coordinates[0], 18);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Add a marker for each navigation point
+for (var i = 0; i < navigation.length; i++) {
+    var navPoint = navigation[i];
+    var marker = L.marker([navPoint.lat, navPoint.lng]).addTo(map);
+    marker.bindPopup(navPoint.bid);
+}
+
+// Add a polyline to show the path
+var path = L.polyline(coordinates, {color: 'red'}).addTo(map);
+
+// Add markers for the start and end of the path
+L.marker(coordinates[0]).addTo(map).bindPopup("Start: " + fromStart);
+L.marker(coordinates[coordinates.length - 1]).addTo(map).bindPopup("End: " + toGoal);
+</script>
+
+</body>
 </html>

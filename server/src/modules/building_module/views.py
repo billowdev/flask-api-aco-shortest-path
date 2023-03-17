@@ -11,7 +11,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.database.db_instance import db
 
 
-@building_bp.post("/navigate")
+@building_bp.route("/navigate", methods=['POST'])
 def handle_navigate_building():
     payload = request.get_json().get('payload', '')
     try:

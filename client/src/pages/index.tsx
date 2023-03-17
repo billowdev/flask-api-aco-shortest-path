@@ -4,7 +4,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Home from './home';
+// import Home from './home';
 import NavigationMap from './navigation/Navigation';
 
 function App() {
@@ -12,8 +12,8 @@ function App() {
     <Router>
       
         <Routes>
-          <Route index path="/" element={<Home />} />
-          <Route index path="/navigation" element={<NavigationMap />} />
+          {/* <Route index path="/" element={<Home />} /> */}
+          <Route index path="/" element={<NavigationMap  />} />
         </Routes>
    
     </Router>

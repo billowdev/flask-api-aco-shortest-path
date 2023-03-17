@@ -87,4 +87,5 @@ const navigationSlice = createSlice({
 
 // export const { test_reducer } = navigationSlice.actions;
 export const navigationSelector = (store: RootState) => store.navigationReducer;
+export const navigationLoadingSelector = (store: RootState) => store.navigationReducer.loading;
 export default navigationSlice.reducer;
