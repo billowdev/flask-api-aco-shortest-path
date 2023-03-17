@@ -16,62 +16,84 @@ type NavigationState = {
 	navigations: NavigationModel
 };
 
+
+
+// best_path: ["G1",
+// 			"G1L01",],
+// 			coordinates: [[
+// 				17.19256404202556,
+// 				104.09360793646384
+// 			],
+// 			[
+// 				17.192329942043273,
+// 				104.09348628794305
+// 			],],
+// 	distance: 1.3155167600975681,
+// 	from_start: "G1",
+// 	navigation: [
+// 		{
+// 			"bid": "G1",
+// 			"is_node": true,
+// 			"lat": "17.192564042025560",
+// 			"lng": "104.093607936463840"
+// 		},
+// 		{
+// 			"bid": "G1L01",
+// 			"is_node": false,
+// 			"lat": "17.192329942043273",
+// 			"lng": "104.093486287943050"
+// 		}
+// 	],
+// 	to_goal: "G1L01",
+// 	navigations: {
+// 		best_path: ["G1",
+// 			"G1L01",],
+// 		coordinates: [[
+// 			17.19256404202556,
+// 			104.09360793646384
+// 		],
+// 		[
+// 			17.192329942043273,
+// 			104.09348628794305
+// 		],],
+// 		distance: 1.3155167600975681,
+// 		from_start: "G1",
+// 		navigation: [
+// 			{
+// 				"bid": "G1",
+// 				"is_node": true,
+// 				"lat": "17.192564042025560",
+// 				"lng": "104.093607936463840"
+// 			},
+// 			{
+// 				"bid": "G1L01",
+// 				"is_node": false,
+// 				"lat": "17.192329942043273",
+// 				"lng": "104.093486287943050"
+// 			}
+// 		],
+// 		to_goal: "G1L1",
+// 	},
+// 	loading: false,
+
 const initialValues: NavigationState = {
-	best_path: ["G1",
-			"G1L01",],
-			coordinates: [[
-				17.19256404202556,
-				104.09360793646384
-			],
-			[
-				17.192329942043273,
-				104.09348628794305
-			],],
-	distance: 1.3155167600975681,
-	from_start: "G1",
+	best_path: [],
+	coordinates: [],
+	distance: 0,
+	from_start: "",
 	navigation: [
-		{
-			"bid": "G1",
-			"is_node": true,
-			"lat": "17.192564042025560",
-			"lng": "104.093607936463840"
-		},
-		{
-			"bid": "G1L01",
-			"is_node": false,
-			"lat": "17.192329942043273",
-			"lng": "104.093486287943050"
-		}
+
 	],
-	to_goal: "G1L01",
+	to_goal: "",
 	navigations: {
-		best_path: ["G1",
-			"G1L01",],
-		coordinates: [[
-			17.19256404202556,
-			104.09360793646384
-		],
-		[
-			17.192329942043273,
-			104.09348628794305
-		],],
-		distance: 1.3155167600975681,
-		from_start: "G1",
+		best_path: [],
+		coordinates: [],
+		distance: 0,
+		from_start: "",
 		navigation: [
-			{
-				"bid": "G1",
-				"is_node": true,
-				"lat": "17.192564042025560",
-				"lng": "104.093607936463840"
-			},
-			{
-				"bid": "G1L01",
-				"is_node": false,
-				"lat": "17.192329942043273",
-				"lng": "104.093486287943050"
-			}
+
 		],
-		to_goal: "G1L1",
+		to_goal: "",
 	},
 	loading: false,
 };
@@ -124,6 +146,8 @@ const navigationSlice = createSlice({
 
 
 export const navigationSelector = (store: RootState): NavigationModel | undefined => store.navigation.navigations;
+export const navigationDataSelector = (store: RootState): NavigationArrayType => store.navigation.navigation;
+export const coordinatesSelector = (store: RootState): CoordinatesType => store.navigation.coordinates;
 
 
 
