@@ -133,139 +133,74 @@ const BuildingPage = ({ }: Props) => {
     {
       field: "bid",
       // editable: true,
-      headerName: "โหนด",
-      width: 240,
+      headerName: "รหัสโหนด",
+      width: 120,
     },
-    // {
-    //   field: "school",
-    //   headerName: "โรงเรียน",
-    //   width: 240,
-    // },
-    // {
-    //   field: "V",
-    //   headerName: "Volts",
-    //   width: 60,
-    // },
-    // {
-    //   field: "A",
-    //   headerName: "Amps",
-    //   width: 60,
-    // },
-    // {
-    //   field: "whr",
-    //   headerName: "W/Hr",
-    //   valueGetter: (params: GridValueGetterParams<any, BuildingPayload>) => {
-    //     return params;
-    //   },
-    //   renderCell: ({ value }: GridRenderCellParams<any>) => (
-    //     <Typography variant="body1">
-    //       <React.Fragment>{value?.row?.V * value?.row?.A}</React.Fragment>
-    //     </Typography>
-    //   ),
-    //   width: 60,
-    // },
-    // {
-    //   field: "weight",
-    //   headerName: "น้ำหนัก (ก.ก.)",
-    //   width: 100,
-    // },
-
-    // {
-    //   field: "wide",
-    //   headerName: "ก",
-    //   width: 20,
-    // },
-    // {
-    //   field: "length",
-    //   headerName: "ย",
-    //   width: 20,
-    // },
-    // {
-    //   field: "height",
-    //   headerName: "ส",
-    //   width: 20,
-    // },
-    // {
-    //   field: "orderPractice",
-    //   headerName: "ลำดับการซ้อม",
-    //   renderCell: ({ value }: GridRenderCellParams<any>) => (
-    //     <Typography variant="body1">
-    //       <React.Fragment>
-    //         {value?.length == 1 ? (
-    //           <React.Fragment>0{value}</React.Fragment>
-    //         ) : (
-    //           <React.Fragment>{value}</React.Fragment>
-    //         )}
-    //       </React.Fragment>
-    //     </Typography>
-    //   ),
-    //   width: 120,
-    // },
-    // {
-    //   field: "orderPlay",
-    //   headerName: "ลำดับการเล่น",
-    //   renderCell: ({ value }: GridRenderCellParams<string>) => (
-    //     <Typography variant="body1">
-    //       <React.Fragment>
-    //         {value?.length == 1 ? (
-    //           <React.Fragment>0{value}</React.Fragment>
-    //         ) : (
-    //           <React.Fragment>{value}</React.Fragment>
-    //         )}
-    //       </React.Fragment>
-    //     </Typography>
-    //   ),
-    //   width: 100,
-    // },
-    // {
-    //   field: "distance",
-    //   headerName: "ระยะทางที่ได้",
-    //   renderCell: ({ value }: GridRenderCellParams<string>) => (
-    //     <Typography variant="body1">
-    //       <React.Fragment>
-    //         {value?.length == 1 ? (
-    //           <React.Fragment>0{value}</React.Fragment>
-    //         ) : (
-    //           <React.Fragment>{value}</React.Fragment>
-    //         )}
-    //       </React.Fragment>
-    //     </Typography>
-    //   ),
-    //   width: 120,
-    // },
-    // {
-    //   headerName: "การดำเนินการ",
-    //   field: ".",
-    //   width: 180,
-    //   renderCell: ({ row }: GridRenderCellParams<string>) => (
-    //     <Stack direction="row">
-    //       <IconButton
-    //         aria-label="delete"
-    //         size="large"
-    //         onClick={() => {
-    //           setSelectedBuilding(row);
-    //           setOpenDialog(true);
-    //         }}
-    //       >
-    //         <DeleteIcon fontSize="inherit" />
-    //       </IconButton>
-    //       <IconButton
-    //         aria-label="edit"
-    //         size="large"
-    //         onClick={() => router.push("/team/edit?id=" + row.id)}
-    //       >
-    //         <EditIcon fontSize="inherit" />
-    //       </IconButton>
-    //       <IconButton
-    //         aria-label="start"
-    //         size="large"
-    //         onClick={() => router.push("/team/" + row.id)}
-    //       >
-    //         <PlayCircleFilledWhiteIcon fontSize="inherit" />
-    //       </IconButton>
-    //     </Stack>
-    //   ),
-    // },
+    {
+      field: "name",
+       editable: true,
+      headerName: "ชื่อโหนด",
+      width: 120,
+    },
+    {
+      field: "desc",
+       editable: true,
+      headerName: "รายละเอียด",
+      width: 180,
+    },
+    {
+      field: "is_node",
+      headerName: "สถานะโหนด",
+      width: 100,
+    },
+    {
+      field: "lat",
+      headerName: "ละติจูด",
+      width: 100,
+    },
+    {
+      field: "lng",
+      headerName: "ลองจิจูด",
+      width: 100,
+    },
+    {
+      field: "image",
+      headerName: "รูปภาพ",
+      width: 100,
+    },
+    {
+      headerName: "การดำเนินการ",
+      field: ".",
+      width: 180,
+      renderCell: ({ row }: GridRenderCellParams<any>) => (
+        <Stack direction="row">
+          <IconButton
+            aria-label="delete"
+            size="large"
+            onClick={() => {
+              setSelectedBuilding(row);
+              setOpenDialog(true);
+            }}
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
+          <IconButton
+            aria-label="edit"
+            size="large"
+            onClick={() => router.push("/building/edit?id=" + row.id)}
+          >
+            <EditIcon fontSize="inherit" />
+          </IconButton>
+          <IconButton
+            aria-label="start"
+            size="large"
+            onClick={() => router.push("/building/" + row.id)}
+          >
+            <PlayCircleFilledWhiteIcon fontSize="inherit" />
+          </IconButton>
+        </Stack>
+      ),
+    },
   ];
 
   return (

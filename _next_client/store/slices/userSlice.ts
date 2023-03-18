@@ -82,7 +82,7 @@ const userSlice = createSlice({
 			state.user = undefined;
 		});
 		builder.addCase(signOut.fulfilled, (state, action) => {
-			state.token = "";
+			state.accessToken = "";
 			state.isAuthenticated = false;
 			state.isAuthenticating = false;
 			state.user = undefined;
@@ -98,6 +98,7 @@ const userSlice = createSlice({
 			state.isAuthenticating = true;
 			state.isAuthenticated = false;
 			state.accessToken = ""
+			state.user = undefined;
 		});
 	},
 });
