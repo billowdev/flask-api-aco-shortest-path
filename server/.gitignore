@@ -1,3 +1,4 @@
 .flaskenv
 .env
 __pycache__/
+public/upload/*
