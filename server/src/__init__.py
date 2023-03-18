@@ -68,12 +68,17 @@ def create_app():
     with app.app_context():
         if app.config['ENV'] == 'development':
             # drop tables individually
-            for table in reversed(db.metadata.sorted_tables):
-                table_names = db.engine.table_names()
-                for table_name in table_names:
-                    db.session.execute(f"DROP TABLE IF EXISTS {table_name}")
+            # for table in reversed(db.metadata.sorted_tables):
+            #     table_names = db.engine.table_names()
+            #     for table_name in table_names:
+            #         db.session.execute(f"DROP TABLE IF EXISTS {table_name}")
             # create new tables
+            db.session.execute('DROP SCHEMA public CASCADE;')
+            db.session.execute('CREATE SCHEMA public;')
+            db.session.commit()
+            print('Dropped all tables was successfully!')
             db.create_all()
+            print('Created all tables was successfully!')
             with suppress(BaseException):
                 seeders.run_seed()
         elif app.config['ENV'] == 'testing' and not app.testing:
