@@ -1,27 +1,26 @@
 import { LatLng, LatLngBoundsExpression, LatLngExpression } from 'leaflet';
 import { useEffect, useState } from 'react';
-import { getNavigation, navigationSelector, coordinatesSelector } from "../../store/slices/navigationSlice";
-import { useSelector } from "react-redux";
+import { getNavigation, navigationSelector, coordinatesSelector } from "../store/slices/navigationSlice";
 
 import React from 'react';
 // import { useAppDispatch, useAppSelector } from '../store';
 import { useAppDispatch } from '@/store/store';
-import { NavigationModel } from './../../models/navigation.model';
-import { CoordinatesType } from '@/models/navigation.model';
-import { store } from "@/store/store";
 import dynamic from 'next/dynamic';
-
+// import { MapContainer, Polyline, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
 	ssr: false, // disable server-side rendering
 });
 
+
 const Polyline = dynamic(() => import('react-leaflet').then((mod) => mod.Polyline), {
 	ssr: false, // disable server-side rendering
 });
+
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), {
 	ssr: false, // disable server-side rendering
 });
+
 const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), {
 	ssr: false, // disable server-side rendering
 });
@@ -30,7 +29,11 @@ const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
 });
 
 
+
 interface NavigationMapProps {
+
+
+
 	bestPath: string[];
 	coordinates: [number, number][];
 	navigation: {
@@ -50,16 +53,19 @@ const CustomNavigationMap = (
 	}: NavigationMapProps
 ) => {
 
+
+
 	const [isBrowser, setIsBrowser] = React.useState(false);
 	React.useEffect(() => {
 		setIsBrowser(true);
 	}, []);
 
+	
 
 
 
 	const dispatch: any = useAppDispatch();
-	
+
 
 	React.useEffect(() => {
 		dispatch(getNavigation({ start: "G1", goal: "C1" }))

@@ -27,7 +27,7 @@ function ShowMap({ }: Props) {
   });
 
   const handleFetchData = async () => {
-    const response = await navigationService.getNavigation({ start: "G1", goal: "A9" });
+    const response = await navigationService.getNavigation({ start: "G1", goal: "C1" });
     console.log('====================================');
     console.log(response.payload);
     console.log('====================================');
@@ -35,13 +35,13 @@ function ShowMap({ }: Props) {
   };
 
   const Map = React.useMemo(() => dynamic(
-    () => import('./map'), // replace '@components/map' with your component's location
+    () => import('../../components/MapComponent'), // replace '@components/map' with your component's location
     {
       loading: () => <p>A map is loading</p>,
       ssr: false // This line is important. It's what prevents server-side render
     }
   ), [/* list variables which should trigger a re-render here */
-    payload
+    
 ])
   return <div>
     <button onClick={handleFetchData}>Fetch Data</button>

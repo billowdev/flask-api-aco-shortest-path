@@ -41,7 +41,7 @@ export const signIn = createAsyncThunk(
 			throw new Error("login failed");
 		}
 
-		httpClient.interceptors.request.use((config?: AxiosRequestConfig) => {
+		httpClient.interceptors.request.use((config?: any) => {
 			if (config && config.headers) {
 				config.headers["Authorization"] = `Bearer ${response.token}`;
 			}
@@ -61,7 +61,7 @@ export const getSession = createAsyncThunk("user/fetchSession", async () => {
 	const response = await authService.getSession();
 	// set access token
 	if (response) {
-		httpClient.interceptors.request.use((config?: AxiosRequestConfig) => {
+		httpClient.interceptors.request.use((config?: any) => {
 			if (config && config.headers && response.id) {
 				config.headers["Authorization"] = `Bearer ${response.token}`;
 			}

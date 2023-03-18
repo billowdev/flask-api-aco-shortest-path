@@ -3,7 +3,6 @@ import { useAppDispatch } from "@/store/store";
 import React from "react";
 import { useSelector } from "react-redux";
 import dynamic from "next/dynamic";
-import MyPage from "./navigation";
 type Props = {};
 const ShowMap = dynamic(() => import("./navigation/show"), { ssr: false });
 const Index = ({}: Props) => {
