@@ -1,8 +1,7 @@
 from contextlib import suppress
 import os
 from flask import Flask, current_app, jsonify, render_template, send_from_directory
-
-from src.constatns.http_status_codes import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
+from .constatns.http_status_codes import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 from .utils.password_hasher import password_hasher, verify_password
 from .database.db_instance import db
 from .database.seeders import building_seeder

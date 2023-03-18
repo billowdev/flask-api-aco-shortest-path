@@ -8,6 +8,8 @@ import { clearCookie, setCookie } from "@/utils/cookies.util";
 import httpClient from "@/utils/httpClient.util";
 import type { NextApiRequest, NextApiResponse } from "next";
 import cookie from "cookie";
+import { SessionPayload } from "@/models/auth.model";
+import { GetSessionResponse } from './../../../../models/auth.model';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.query.AUTH) {
@@ -43,19 +45,29 @@ async function signin(req: NextApiRequest, res: NextApiResponse<any>) {
 	}
 }
 
-function signout(req: NextApiRequest, res: NextApiResponse<any>) {
-	clearCookie(res, ACCESS_TOKEN_KEY);
-	res.json({ result: "signout successfuly" });
+const signout = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+	try {
+		const cookies = cookie.parse(req.headers.cookie || "");
+		clearCookie(res, ACCESS_TOKEN_KEY);
+		res.json({ result: "signout successfuly" });
+		
+	} catch (error: any) {
+		res.json({ success: false, msg: "something wentwrong" });
+	}
+
+
 }
 
 const getSession = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 	try {
 		const cookies = cookie.parse(req.headers.cookie || "");
 		const token = cookies[ACCESS_TOKEN_KEY];
+		
 		if (token) {
-			const response = await httpClient.get(`/users/getsession`, {
+			const response = await httpClient.get<GetSessionResponse>(`/users/getsession`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
+
 			res.json(response.data);
 		} else {
 			res.json({ success: false, msg: "something wentwrong" });

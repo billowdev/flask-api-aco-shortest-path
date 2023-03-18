@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { GetStaticProps } from 'next';
 import ModalList from '@/components/ModalList';
 import { LatLngBoundsExpression, LatLngExpression } from 'leaflet';
-import { BuildingPayload } from '@/models/buildings.model';
+import { BuildingPayload } from '@/models/building.model';
 import Image from 'next/image';
 import { BUILDING_IMAGE_ROUTE, ENDPOINT } from '@/utils/constant';
 

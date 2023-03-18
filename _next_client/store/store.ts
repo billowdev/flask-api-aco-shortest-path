@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import historyReducer from "./slices/historySlice";
 import teamReducer from "./slices/teamSlice";
 import userReducer from "./slices/userSlice"
+import buildingReducer from "./slices/buildingSlice"
 
 import navigationReducer from "./slices/navigationSlice";
 
@@ -13,6 +14,7 @@ const reducer = {
   history: historyReducer,
   user: userReducer,
   navigation: navigationReducer,
+  building: buildingReducer
 };
 
 export const store = configureStore({

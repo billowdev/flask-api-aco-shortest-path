@@ -97,7 +97,7 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
             onClose={handleClose}
           >
             <MenuItem onClick={() => dispatch(signOut())}>ออกจากระบบ</MenuItem>
-            <MenuItem onClick={handleClose}>สวัสดีคุณ {userData.username}</MenuItem>
+            {/* <MenuItem onClick={handleClose}>สวัสดีคุณ {userData.username}</MenuItem> */}
           </Menu>
 
       </Toolbar>

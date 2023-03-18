@@ -1,3 +1,4 @@
+import datetime
 from sqlite3 import IntegrityError
 from flask import jsonify, request, current_app, url_for
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
@@ -5,10 +6,11 @@ from src.utils.password_hasher import password_hasher, verify_password
 from . import user_bp
 from src.modules.user_module.models import UserModel
 from src.database.db_instance import db
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token, get_raw_jwt
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token
 from flask_mail import Message, Mail
 from http import HTTPStatus as status
-
+# from flask_jwt_extended import get_jwt_claims
+import jwt
 BLACKLIST = set()
 
 @user_bp.route('/users', methods=['GET'])
@@ -87,24 +89,25 @@ def login():
     }), HTTP_401_UNAUTHORIZED
 
 
+
 @user_bp.get('/getsession')
 @jwt_required()
 def get_session():
-    current_user_id = get_jwt_identity()
-    access_token = create_access_token(identity=current_user_id)
-    return jsonify({
-        'access_token': access_token
-    })
-    
-    
-@user_bp.post('/logout')
-@jwt_required()
-def logout():
-    jti = get_raw_jwt()['jti']
-    BLACKLIST.add(jti)
-    return jsonify({"msg": "Successfully logged out"}), HTTP_200_OK
+    auth_header = request.headers.get('Authorization')
+    if auth_header:
+        token = auth_header.split(" ")[1]
+        current_user_id = get_jwt_identity()
+        payload = jwt.decode(token, current_app.config['JWT_SECRET_KEY'], algorithms=['HS256'], options={'verify_exp': True})
+        access_token = create_access_token(identity=current_user_id, additional_claims={'role':payload['role']})
+        return jsonify({
+            "message": "get session",
+            "payload": {
+                'access_token': access_token
+            }
+      })
+    else:
+        return jsonify({"message": "failed get session"}), HTTP_400_BAD_REQUEST
 
-    
 @user_bp.get("/me")
 @jwt_required()
 def me():

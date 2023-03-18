@@ -1,7 +1,7 @@
 import axios from "axios";
 import httpClient from "../utils/httpClient.util";
 import { NodeResponse } from '../models/navigation.model';
-import { BuildingResponse } from "@/models/buildings.model";
+import { BuildingResponse } from "@/models/building.model";
 import {  ENDPOINT} from '@/utils/constant';
 
 export const getNavigation = async (data: any): Promise<any> => {
@@ -40,6 +40,7 @@ export const getNode = async (): Promise<NodeResponse> => {
 	const { data: response } = await httpClient.get(`/buildings/node`, {
 		baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
 	});
+
 	// const response = await axios.get(
 	// 	'http://localhost:3000/api/navigation'
 	// );

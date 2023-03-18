@@ -1,13 +1,13 @@
 import httpClient from "@/utils/httpClient.util";
-import { SignUp, SignIn, GetSession } from "@/models/auth.model";
+import { SignIn, SessionPayload, GetSessionResponse } from "@/models/auth.model";
 
 type signProps = {
 	username: string;
 	password: string;
   };
 
-  export const signIn = async (user: any): Promise<any> => {
-	const { data: response } = await httpClient.post<any>(
+  export const signIn = async (user: any): Promise<SignIn> => {
+	const { data: response } = await httpClient.post<SignIn>(
 	  `/user/auth/signin`,
 	  user,
 	  {
@@ -24,10 +24,10 @@ type signProps = {
 	return response.data;
   }
   
-  export const getSession = async (): Promise<GetSession> => {
+  export const getSession = async (): Promise<SessionPayload> => {
 	const response = await httpClient.get(`/user/auth/session`, {
 	  baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
 	});
-  
-	return response.data;
+
+	return response.data.payload;
   };

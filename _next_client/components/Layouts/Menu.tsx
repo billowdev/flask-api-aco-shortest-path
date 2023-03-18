@@ -106,9 +106,9 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
 
       <Divider />
       <List>
-        {userData && userData?.username && (
+        {/* {userData && userData?.username && (
           <>
-            {/* team */}
+    
             <Link href="/team" passHref>
               <ListItem
                 button
@@ -121,7 +121,7 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
               </ListItem>
             </Link>
 
-            {/* History */}
+     
             <Link href="/history" passHref>
               <ListItem
                 button
@@ -136,7 +136,7 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
 
             <Divider />
           </>
-        )}
+        )} */}
 
         <Link href="/timer" passHref>
           <ListItem
@@ -163,7 +163,7 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
         </Link>
         <Divider />
 
-        {userData && !userData.token && (
+        {/* {userData && !userData.token && (
           <>
             <Link href="/auth/signin" passHref>
               <ListItem
@@ -179,7 +179,7 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
               </ListItem>
             </Link>
           </>
-        )}
+        )} */}
       </List>
     </Drawer>
   );

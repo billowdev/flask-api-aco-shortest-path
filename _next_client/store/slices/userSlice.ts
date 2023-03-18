@@ -7,6 +7,7 @@ import { AxiosRequestConfig } from "axios";
 import Router from "next/router";
 
 interface UserState {
+	accessToken: string;
 	isAuthenticated: boolean;
 	isAuthenticating: boolean;
 	user?: UserData;
@@ -14,6 +15,7 @@ interface UserState {
 
 
 const initialState: UserState = {
+	accessToken: "",
 	isAuthenticated: false,
 	isAuthenticating: true,
 	user: undefined,
@@ -85,18 +87,18 @@ const userSlice = createSlice({
 		// 	state.isAuthenticating = false;
 		// 	state.user = undefined;
 		// });
-		// builder.addCase(getSession.fulfilled, (state, action) => {
-		// 	state.isAuthenticating = false;
-		// 	if (action.payload.id && action.payload.username) {
-		// 		state.token = action.payload.token
-		// 		state.username = action.payload.username
-		// 		state.isAuthenticated = true;
-		// 	}
-		// });
-		// builder.addCase(getSession.rejected, (state, action) => {
-		// 	state.isAuthenticating = true;
-		// 	state.isAuthenticated = false;
-		// });
+		builder.addCase(getSession.fulfilled, (state, action) => {
+			state.isAuthenticating = false;
+			if (action.payload) {
+				state.accessToken = action.payload.payload.access_token
+				state.isAuthenticated = true;
+			}
+		});
+		builder.addCase(getSession.rejected, (state, action) => {
+			state.isAuthenticating = true;
+			state.isAuthenticated = false;
+			state.accessToken = ""
+		});
 	},
 });
 
