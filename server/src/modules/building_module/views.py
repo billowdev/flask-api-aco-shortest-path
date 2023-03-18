@@ -5,6 +5,8 @@ from src.constatns.http_status_codes import HTTP_200_OK, HTTP_400_BAD_REQUEST, H
 from src.modules.building_module.models import BuildingModel
 from src.modules.user_module.models import UserModel
 from src.utils.aco.aco_nearest_node import aco_nearest_node
+from src.utils.aco.aco_nearest_node_geo_location import aco_nearest_node_geo_location
+
 from src.utils.aco.aco_shourtest_path import aco_shortest_path
 from . import building_bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -121,6 +123,37 @@ def handle_nearest_building():
         return jsonify({'message': 'find nearest building was failed'}), HTTP_400_BAD_REQUEST
 
 
+@building_bp.post("/me/nearest")
+def handle_find_nearest_building():
+    payload = request.get_json()
+    
+    try:
+        if 'current' in payload:
+            current = payload['current']
+            new_current = [decimal.Decimal(current[0]), decimal.Decimal(current[1])]
+            raw_buildings = BuildingModel.query.all()
+            buildings = []
+            for each_building in range(len(raw_buildings)):
+                buildings.append(raw_buildings[each_building].to_dict())
+
+            # buildings = buildings
+            # use aco to find best path
+            aco_nearest = aco_nearest_node_geo_location(
+                 buildings, new_current)
+            # print(aco_nearest)
+            return jsonify({
+                'message': 'Building navigate successfully',
+                'payload': {
+                    "nearest_building": aco_nearest,
+                     # "aco_nearest": aco_nearest,
+                }
+            }), HTTP_200_OK
+        else:
+            return jsonify({'message': 'present_lat or present_lng is required or something went wrong'}), HTTP_400_BAD_REQUEST
+    except BaseException as e:
+        print(e)
+        return jsonify({'message': 'find nearest building was failed'}), HTTP_400_BAD_REQUEST
+    
 @building_bp.route("/get", methods=["GET"])
 def handle_get_buildings():
     buildings = BuildingModel.query.all()

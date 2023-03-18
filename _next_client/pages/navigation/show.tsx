@@ -78,11 +78,6 @@ function ShowMap({ nodes }: Props) {
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item>
-          <Button variant="contained" color="primary" onClick={handleFetchData}>
-            เริ่มต้นนำทาง
-          </Button>
-        </Grid>
-        <Grid item>
           <Button variant="contained" color="primary" onClick={hadnleCurrentLocation}>
             ตำแหน่งปัจจุบัน
           </Button>
@@ -93,6 +88,12 @@ function ShowMap({ nodes }: Props) {
           เลือกปลายทาง
           </Button>
           <ModalList open={modalOpen} onClose={handleModalClose} onSelect={handleNodeSelect} nodes={nodes} />
+        </Grid>
+        
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={handleFetchData}>
+            เริ่มต้นนำทาง
+          </Button>
         </Grid>
 
         <Grid item>

@@ -92,5 +92,6 @@ def aco_nearest_node(locations, current_node):
 	return locations[nearest_location_index]['bid']
 
 
-a = aco_nearest_node(my_locations, "C1")
-print(a)
+
+# a = aco_nearest_node(my_locations, "C1")
+# print(a)
