@@ -1,6 +1,7 @@
 import axios from "axios";
 import httpClient from "../utils/httpClient.util";
-import { BuildingsResponse, NavigationModel } from '../models/navigation.model';
+import {   NodeResponse } from '../models/navigation.model';
+import { BuildingResponse } from "@/models/buildings.model";
 
 export const getNavigation = async (data: any): Promise<any> => {
 	const bid_start = data.start
@@ -23,7 +24,18 @@ export const getNavigation = async (data: any): Promise<any> => {
 
 };
 
-export const getNode = async (): Promise<BuildingsResponse> => {
+export const getBuildings = async (): Promise<BuildingResponse> =>{
+	// const response = await axios.get(
+	// 	'http://localhost:5000/api/v1/buildings/get'
+	//   );
+	const { data: response } = await httpClient.get(`/buildings/get/all/node`, {
+		baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
+	});
+
+	  return response;
+}
+
+export const getNode = async (): Promise<NodeResponse> => {
 	const response = await axios.get(
 	  'http://localhost:3000/api/navigation'
 	);
