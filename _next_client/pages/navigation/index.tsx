@@ -5,17 +5,16 @@ import * as navigationService from "@/services/navigationService"
 import { Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { GetStaticProps } from 'next';
-import axios from 'axios';
 import ModalList from '@/components/ModalList';
 import { LatLngBoundsExpression, LatLngExpression } from 'leaflet';
 import { BuildingPayload } from '@/models/buildings.model';
 import Image from 'next/image';
 import { BUILDING_IMAGE_ROUTE, ENDPOINT} from '@/utils/constant';
 
+
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
   ssr: false, // disable server-side rendering
 });
-
 
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), {
   ssr: false, // disable server-side rendering
@@ -28,6 +27,9 @@ const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
   ssr: false, // disable server-side rendering
 });
 
+
+
+
 type Props = {
   nodes: string[];
   buildings: BuildingPayload[]
@@ -39,11 +41,9 @@ const useStyles = makeStyles({
   },
 });
 
-function Navigation({ nodes, buildings }: Props) {
-  console.log('====================================');
-  console.log(buildings);
-  console.log('====================================');
 
+
+function Navigation({ nodes, buildings }: Props) {
   const classes = useStyles();
 
 
@@ -54,7 +54,6 @@ function Navigation({ nodes, buildings }: Props) {
     [17.18355011514967, 104.08249309701569], // Southwest corner of Sakon Nakhon Province
     [17.19193437239573, 104.09560373412965] // Northeast corner of Sakon Nakhon Province
   ];
-
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -83,16 +82,27 @@ function Navigation({ nodes, buildings }: Props) {
 
   const handleFetchData = async () => {
     if (selectedNode) {
-      const response = await navigationService.getNavigation({ start: "G1", goal: selectedNode });
+      const response = await navigationService.getNavigation({ start: currentPosition, goal: selectedNode });
       setPayload(response.payload);
-    } else {
-      const response = await navigationService.getNavigation({ start: "G1", goal: "C1" });
-      setPayload(response.payload);
-    }
+    } 
   };
 
-  const hadnleCurrentLocation = async () => {
+	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
+  useEffect(() => {
+		const intervalId = setInterval(() => {
+			navigator.geolocation.getCurrentPosition(
+				position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+				error => console.log(error)
+			);
+		}, 3000);
 
+		return () => clearInterval(intervalId);
+	}, []);
+  const hadnleCurrentLocation = async () => {
+			navigator.geolocation.getCurrentPosition(
+				position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+				error => console.log(error)
+			);
   }
 
   const Map = React.useMemo(() => dynamic(
@@ -104,6 +114,8 @@ function Navigation({ nodes, buildings }: Props) {
   ), [/* list variables which should trigger a re-render here */
 
   ])
+
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
@@ -112,7 +124,9 @@ function Navigation({ nodes, buildings }: Props) {
             ตำแหน่งปัจจุบัน
           </Button>
         </Grid>
-
+        <Grid item>
+        ตำแหน่งปัจจุบัน lat:{currentPosition[0]} lng:{currentPosition[1]}
+        </Grid>
         <Grid item>
           <Button variant="contained" color="primary" onClick={handleModalOpen}>
             เลือกปลายทาง
@@ -131,7 +145,6 @@ function Navigation({ nodes, buildings }: Props) {
             <h5>ปลายทาง: {selectedNode}</h5>
           )}
         </Grid>
-
 
       </Grid>
       {payload.best_path.length > 0 ? (
@@ -152,6 +165,13 @@ function Navigation({ nodes, buildings }: Props) {
           }}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <Marker position={currentPosition} autoPanOnFocus autoPan>
+          <Popup>
+              <div>
+                <h3>ตำแหน่งปัจจุบันของคุณ</h3>
+              </div>
+            </Popup>
+          </Marker>
 
           {buildings.map(({ bid, name, desc, lat, lng, image }) => (
           <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}>
@@ -160,7 +180,6 @@ function Navigation({ nodes, buildings }: Props) {
                 <h3>{bid}</h3>
                 <h3>{name}</h3>
                 <p>{desc}</p>
-                <p>{`${BUILDING_IMAGE_ROUTE}/${image}`}</p>
                 <Image
 								src={`${BUILDING_IMAGE_ROUTE}/${image}`}                
 								alt="My Image"
@@ -195,5 +214,5 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   };
 };
 
-export default Navigation
 
+export default Navigation

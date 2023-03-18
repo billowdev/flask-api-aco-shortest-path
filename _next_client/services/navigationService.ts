@@ -5,16 +5,16 @@ import { BuildingResponse } from "@/models/buildings.model";
 import {  ENDPOINT} from '@/utils/constant';
 
 export const getNavigation = async (data: any): Promise<any> => {
-	const bid_start = data.start
-	const bid_goal = data.goal
+	const start_state = data.start
+	const goal_state = data.goal
 
 	const body = {
 		payload: {
-			bid_start, bid_goal
+			start_state, goal_state
 		}
 	}
 
-	const response = await axios.post(`${ENDPOINT}/buildings/navigate`, body, {
+	const response = await axios.post(`${ENDPOINT}/buildings/navigate/geo`, body, {
 		headers: {
 			'Content-Type': 'application/json',
 		},
@@ -37,8 +37,11 @@ export const getBuildings = async (): Promise<BuildingResponse> => {
 }
 
 export const getNode = async (): Promise<NodeResponse> => {
-	const response = await axios.get(
-		'http://localhost:3000/api/navigation'
-	);
-	return response.data;
+	const { data: response } = await httpClient.get(`/buildings/node`, {
+		baseURL: process.env.NEXT_PUBLIC_BASE_URL_API,
+	});
+	// const response = await axios.get(
+	// 	'http://localhost:3000/api/navigation'
+	// );
+	return response;
 };

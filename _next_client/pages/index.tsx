@@ -5,19 +5,19 @@ import { useSelector } from "react-redux";
 import dynamic from "next/dynamic";
 type Props = {};
 const ShowMap = dynamic(() => import("./navigation"), { ssr: false });
-const Index = ({}: Props) => {
+const Index = ({ }: Props) => {
 
   // const dispatch: any = useAppDispatch();
-	// const navigationList: any = useSelector(navigationSelector);
+  // const navigationList: any = useSelector(navigationSelector);
 
-	// React.useEffect(() => {
-	// 	dispatch(getNavigation({ start: "G1", goal: "C1" }));
-	// }, [dispatch]);
+  // React.useEffect(() => {
+  // 	dispatch(getNavigation({ start: "G1", goal: "C1" }));
+  // }, [dispatch]);
 
-  
+
   return (
     <>
-   
+      <h1>Hello world</h1>
     </>
   );
 };

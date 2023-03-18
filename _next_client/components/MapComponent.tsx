@@ -69,29 +69,29 @@ const CustomNavigationMap = (
 
 	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
 	// get current every 3 second
-	// useEffect(() => {
-	// 	const intervalId = setInterval(() => {
-	// 		navigator.geolocation.getCurrentPosition(
-	// 			position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
-	// 			error => console.log(error)
-	// 		);
-	// 	}, 3000);
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			navigator.geolocation.getCurrentPosition(
+				position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+				error => console.log(error)
+			);
+		}, 2000);
 
-	// 	return () => clearInterval(intervalId);
-	// }, []);
+		return () => clearInterval(intervalId);
+	}, []);
 
 
 	// simulate curent from coordinate 
 
-	React.useEffect(() => {
-		let counter = 0;
-		const intervalId = setInterval(() => {
-			setCurrentPosition([coordinates[counter][0], coordinates[counter][1]]);
-			counter = (counter + 1) % coordinates.length;
-		}, 1000);
+	// React.useEffect(() => {
+	// 	let counter = 0;
+	// 	const intervalId = setInterval(() => {
+	// 		setCurrentPosition([coordinates[counter][0], coordinates[counter][1]]);
+	// 		counter = (counter + 1) % coordinates.length;
+	// 	}, 1000);
 
-		return () => clearInterval(intervalId);
-	}, [coordinates]);
+	// 	return () => clearInterval(intervalId);
+	// }, [coordinates]);
 
 
 
@@ -155,11 +155,11 @@ const CustomNavigationMap = (
 			<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 			<h1>{fromStart[0]}</h1>
 			<div>
-				<Marker position={[fromStart[0], fromStart[1]]}>
-					<Popup>Your current location.</Popup>
+				<Marker position={[fromStart[0], fromStart[1]]} autoPanOnFocus>
+					<Popup>ตำแหน่งปัจจุบันของคุณ</Popup>
 				</Marker>
 				<Marker position={[parseFloat(toGoal[0]), parseFloat(toGoal[1])]}>
-					<Popup>Your goal location.</Popup>
+					<Popup>อาคารเป้าหมายของคุณ</Popup>
 				</Marker>
 				<Polyline pathOptions={{ color: 'blue', dashArray: '10, 10' }} positions={path} />
 				<Polyline pathOptions={{ color: 'red' }} positions={_path} />
