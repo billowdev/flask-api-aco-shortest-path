@@ -151,7 +151,7 @@ const CustomNavigationMap = (
 
 
 	return (
-		<MapContainer center={[fromStart[0], fromStart[1]]} zoom={20} style={{ height: '100vh' }}>
+		<MapContainer center={[fromStart[0], fromStart[1]]} zoom={16} style={{ height: '100vh' }}>
 			<TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 			<h1>{fromStart[0]}</h1>
 			<div>
