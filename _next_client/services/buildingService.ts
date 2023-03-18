@@ -4,7 +4,7 @@ import { ForkedTask } from "@reduxjs/toolkit";
 
 export const getBuildings = async (): Promise<BuildingPayload[]> => {
 	const response = await httpClient.get(`/buildings/get/all`)
-	return response.data;
+	return response.data.payload;
 };
 
 export const getBuilding = async (id: string) => {

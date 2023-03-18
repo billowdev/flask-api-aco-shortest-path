@@ -133,7 +133,7 @@ const BuildingPage = ({ }: Props) => {
     {
       field: "bid",
       // editable: true,
-      headerName: "โ",
+      headerName: "โหนด",
       width: 240,
     },
     // {

@@ -31,7 +31,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 async function signin(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
 		const { username, password } = req.body
-		const response = await httpClient.post(`/auth/signin`, { username, password });
+		const response = await httpClient.post(`/users/login`, { username, password });
 		const { token } = response.data;
 		setCookie(res, ACCESS_TOKEN_KEY, token, {
 			httpOnly: true,
@@ -46,15 +46,8 @@ async function signin(req: NextApiRequest, res: NextApiResponse<any>) {
 }
 
 const signout = async (req: NextApiRequest, res: NextApiResponse<any>) => {
-	try {
-		const cookies = cookie.parse(req.headers.cookie || "");
-		clearCookie(res, ACCESS_TOKEN_KEY);
-		res.json({ result: "signout successfuly" });
-		
-	} catch (error: any) {
-		res.json({ success: false, msg: "something wentwrong" });
-	}
-
+	clearCookie(res, ACCESS_TOKEN_KEY);
+	res.json({ result: "signout successfuly" });
 
 }
 

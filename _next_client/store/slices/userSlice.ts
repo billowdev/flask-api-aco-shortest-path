@@ -48,7 +48,7 @@ export const signIn = createAsyncThunk(
 
 export const signOut = createAsyncThunk("user/signout", async () => {
 	await authService.signOut();
-	Router.push("/auth/signin");
+	Router.push("/panel/login");
 });
 
 export const getSession = createAsyncThunk("user/fetchSession", async () => {
@@ -81,16 +81,16 @@ const userSlice = createSlice({
 			state.isAuthenticating = false;
 			state.user = undefined;
 		});
-		// builder.addCase(signOut.fulfilled, (state, action) => {
-		// 	state.token = "";
-		// 	state.isAuthenticated = false;
-		// 	state.isAuthenticating = false;
-		// 	state.user = undefined;
-		// });
+		builder.addCase(signOut.fulfilled, (state, action) => {
+			state.token = "";
+			state.isAuthenticated = false;
+			state.isAuthenticating = false;
+			state.user = undefined;
+		});
 		builder.addCase(getSession.fulfilled, (state, action) => {
 			state.isAuthenticating = false;
 			if (action.payload) {
-				state.accessToken = action.payload.payload.access_token
+				state.accessToken = action.payload.access_token
 				state.isAuthenticated = true;
 			}
 		});

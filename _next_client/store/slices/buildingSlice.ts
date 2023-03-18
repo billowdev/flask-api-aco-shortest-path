@@ -5,12 +5,11 @@ import { BuildingPayload } from "@/models/building.model";
 
 interface BuildingState {
   buildings: BuildingPayload[];
-  building: BuildingPayload;
+
 }
 
 const initialState: BuildingState = {
-	buildings: [],
-  building: {}
+	buildings: []
 };
 
 export const getBuilding = createAsyncThunk(
@@ -51,7 +50,7 @@ const buildingSlice = createSlice({
       state.buildings = action.payload;
     });
     builder.addCase(getBuilding.fulfilled, (state, action) => {
-      state.building = action.payload;
+      state.buildings = action.payload;
     });
 
 

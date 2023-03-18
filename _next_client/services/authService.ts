@@ -29,5 +29,5 @@ type signProps = {
 	  baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
 	});
 
-	return response.data.payload;
+	return response.data;
   };
