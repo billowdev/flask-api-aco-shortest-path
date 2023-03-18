@@ -7,21 +7,13 @@ import { AxiosRequestConfig } from "axios";
 import Router from "next/router";
 
 interface UserState {
-	token: string;
-	error?: string;
-	username?: string;
 	isAuthenticated: boolean;
 	isAuthenticating: boolean;
 	user?: UserData;
 }
 
-interface SingleProp {
-	data: string;
-}
 
 const initialState: UserState = {
-	token: "",
-	username: "",
 	isAuthenticated: false,
 	isAuthenticating: true,
 	user: undefined,
@@ -62,8 +54,8 @@ export const getSession = createAsyncThunk("user/fetchSession", async () => {
 	// set access token
 	if (response) {
 		httpClient.interceptors.request.use((config?: any) => {
-			if (config && config.headers && response.id) {
-				config.headers["Authorization"] = `Bearer ${response.token}`;
+			if (config && config.headers) {
+				config.headers["Authorization"] = `Bearer ${response.access_token}`;
 			}
 			return config;
 		});
@@ -78,35 +70,33 @@ const userSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(signIn.fulfilled, (state, action) => {
-			state.token = action.payload.token;
 			state.isAuthenticated = true;
 			state.isAuthenticating = false;
 			state.user = action.payload.user;
 		});
 		builder.addCase(signIn.rejected, (state, action) => {
-			state.token = "";
 			state.isAuthenticated = false;
 			state.isAuthenticating = false;
 			state.user = undefined;
 		});
-		builder.addCase(signOut.fulfilled, (state, action) => {
-			state.token = "";
-			state.isAuthenticated = false;
-			state.isAuthenticating = false;
-			state.user = undefined;
-		});
-		builder.addCase(getSession.fulfilled, (state, action) => {
-			state.isAuthenticating = false;
-			if (action.payload.id && action.payload.username) {
-				state.token = action.payload.token
-				state.username = action.payload.username
-				state.isAuthenticated = true;
-			}
-		});
-		builder.addCase(getSession.rejected, (state, action) => {
-			state.isAuthenticating = true;
-			state.isAuthenticated = false;
-		});
+		// builder.addCase(signOut.fulfilled, (state, action) => {
+		// 	state.token = "";
+		// 	state.isAuthenticated = false;
+		// 	state.isAuthenticating = false;
+		// 	state.user = undefined;
+		// });
+		// builder.addCase(getSession.fulfilled, (state, action) => {
+		// 	state.isAuthenticating = false;
+		// 	if (action.payload.id && action.payload.username) {
+		// 		state.token = action.payload.token
+		// 		state.username = action.payload.username
+		// 		state.isAuthenticated = true;
+		// 	}
+		// });
+		// builder.addCase(getSession.rejected, (state, action) => {
+		// 	state.isAuthenticating = true;
+		// 	state.isAuthenticated = false;
+		// });
 	},
 });
 

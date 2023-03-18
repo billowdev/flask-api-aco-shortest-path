@@ -5,9 +5,11 @@ from src.utils.password_hasher import password_hasher, verify_password
 from . import user_bp
 from src.modules.user_module.models import UserModel
 from src.database.db_instance import db
-from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token, create_refresh_token, get_raw_jwt
 from flask_mail import Message, Mail
+from http import HTTPStatus as status
 
+BLACKLIST = set()
 
 @user_bp.route('/users', methods=['GET'])
 def get_users():
@@ -85,6 +87,24 @@ def login():
     }), HTTP_401_UNAUTHORIZED
 
 
+@user_bp.get('/getsession')
+@jwt_required()
+def get_session():
+    current_user_id = get_jwt_identity()
+    access_token = create_access_token(identity=current_user_id)
+    return jsonify({
+        'access_token': access_token
+    })
+    
+    
+@user_bp.post('/logout')
+@jwt_required()
+def logout():
+    jti = get_raw_jwt()['jti']
+    BLACKLIST.add(jti)
+    return jsonify({"msg": "Successfully logged out"}), HTTP_200_OK
+
+    
 @user_bp.get("/me")
 @jwt_required()
 def me():

@@ -53,7 +53,7 @@ const getSession = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 		const cookies = cookie.parse(req.headers.cookie || "");
 		const token = cookies[ACCESS_TOKEN_KEY];
 		if (token) {
-			const response = await httpClient.get(`/auth/session`, {
+			const response = await httpClient.get(`/users/getsession`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			res.json(response.data);

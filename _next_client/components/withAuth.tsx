@@ -22,17 +22,17 @@ const withAuth = (WrappedComponent: any) => (props: any) => {
     }
 
     // If user is not logged in, return login component
-    if (route !== "/auth/signin") {
+    if (route !== "/panel/login") {
       if (!isAuthenticated) {
-        router.push(`/auth/signin`);
+        router.push(`/panel/signin`);
         return null;
       } else if (route == "/") {
-        router.push(`/timer`); // default page after login when call root path
+        router.push(`/`); // default page after login when call root path
         return null;
       }
     } else {
       if (isAuthenticated) {
-        router.push(`/timer`); // default page after login
+        router.push(`/`); // default page after login
         return null;
       }
     }

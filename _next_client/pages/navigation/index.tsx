@@ -9,8 +9,7 @@ import ModalList from '@/components/ModalList';
 import { LatLngBoundsExpression, LatLngExpression } from 'leaflet';
 import { BuildingPayload } from '@/models/buildings.model';
 import Image from 'next/image';
-import { BUILDING_IMAGE_ROUTE, ENDPOINT} from '@/utils/constant';
-
+import { BUILDING_IMAGE_ROUTE, ENDPOINT } from '@/utils/constant';
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
   ssr: false, // disable server-side rendering
@@ -28,8 +27,6 @@ const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
 });
 
 
-
-
 type Props = {
   nodes: string[];
   buildings: BuildingPayload[]
@@ -44,8 +41,8 @@ const useStyles = makeStyles({
 
 
 function Navigation({ nodes, buildings }: Props) {
-  const classes = useStyles();
 
+  const classes = useStyles();
 
   const center: LatLngExpression = [17.188552015996446, 104.08972433221602]; // Centered on Sakon Nakhon Province
   const zoom: number = 16;
@@ -84,25 +81,25 @@ function Navigation({ nodes, buildings }: Props) {
     if (selectedNode) {
       const response = await navigationService.getNavigation({ start: currentPosition, goal: selectedNode });
       setPayload(response.payload);
-    } 
+    }
   };
 
-	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
+  const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
   useEffect(() => {
-		const intervalId = setInterval(() => {
-			navigator.geolocation.getCurrentPosition(
-				position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
-				error => console.log(error)
-			);
-		}, 3000);
+    const intervalId = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(
+        position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+        error => console.log(error)
+      );
+    }, 3000);
 
-		return () => clearInterval(intervalId);
-	}, []);
+    return () => clearInterval(intervalId);
+  }, []);
   const hadnleCurrentLocation = async () => {
-			navigator.geolocation.getCurrentPosition(
-				position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
-				error => console.log(error)
-			);
+    navigator.geolocation.getCurrentPosition(
+      position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+      error => console.log(error)
+    );
   }
 
   const Map = React.useMemo(() => dynamic(
@@ -115,6 +112,7 @@ function Navigation({ nodes, buildings }: Props) {
 
   ])
 
+ 
 
   return (
     <div className={classes.root}>
@@ -123,9 +121,6 @@ function Navigation({ nodes, buildings }: Props) {
           <Button variant="contained" color="primary" onClick={hadnleCurrentLocation}>
             ตำแหน่งปัจจุบัน
           </Button>
-        </Grid>
-        <Grid item>
-        ตำแหน่งปัจจุบัน lat:{currentPosition[0]} lng:{currentPosition[1]}
         </Grid>
         <Grid item>
           <Button variant="contained" color="primary" onClick={handleModalOpen}>
@@ -166,7 +161,7 @@ function Navigation({ nodes, buildings }: Props) {
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Marker position={currentPosition} autoPanOnFocus autoPan>
-          <Popup>
+            <Popup>
               <div>
                 <h3>ตำแหน่งปัจจุบันของคุณ</h3>
               </div>
@@ -174,22 +169,22 @@ function Navigation({ nodes, buildings }: Props) {
           </Marker>
 
           {buildings.map(({ bid, name, desc, lat, lng, image }) => (
-          <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}>
-            <Popup>
-              <div>
-                <h3>{bid}</h3>
-                <h3>{name}</h3>
-                <p>{desc}</p>
-                <Image
-								src={`${BUILDING_IMAGE_ROUTE}/${image}`}                
-								alt="My Image"
-								width={100}
-								height={100}
-							/>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+            <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}>
+              <Popup>
+                <div>
+                  <h3>{bid}</h3>
+                  <h3>{name}</h3>
+                  <p>{desc}</p>
+                  <Image
+                    src={`${BUILDING_IMAGE_ROUTE}/${image}`}
+                    alt="My Image"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+              </Popup>
+            </Marker>
+          ))}
         </MapContainer>
       )
       }

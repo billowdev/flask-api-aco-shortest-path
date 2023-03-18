@@ -1,12 +1,13 @@
 import httpClient from "@/utils/httpClient.util";
 import { SignUp, SignIn, GetSession } from "@/models/auth.model";
+
 type signProps = {
 	username: string;
 	password: string;
   };
 
-  export const signIn = async (user: any): Promise<SignIn> => {
-	const { data: response } = await httpClient.post<SignIn>(
+  export const signIn = async (user: any): Promise<any> => {
+	const { data: response } = await httpClient.post<any>(
 	  `/user/auth/signin`,
 	  user,
 	  {
