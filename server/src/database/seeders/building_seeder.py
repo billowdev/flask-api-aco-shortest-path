@@ -12,7 +12,7 @@ def seed():
             "name": "ประตู 1",
             "desc": "",
             "is_node": 1,
-            "image": "default.png",
+            "image": "G1_3e4d03c2-79db-431f-aec9-8faceb4d6817.png",
             "lat": 17.192505969885183, 
             "lng": 104.0936199995255,
             "created_at": datetime.now(),

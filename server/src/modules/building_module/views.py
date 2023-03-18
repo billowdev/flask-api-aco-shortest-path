@@ -5,14 +5,13 @@ from src.constatns.http_status_codes import HTTP_201_CREATED, HTTP_500_INTERNAL_
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 from src.modules.building_module.models import BuildingModel
 from src.modules.user_module.models import UserModel
-from src.utils.aco.aco_nearest_node import aco_nearest_node
-from src.utils.aco.aco_nearest_node_geo_location import aco_nearest_node_geo_location
 from werkzeug.utils import secure_filename
-from src.utils.aco.aco_shourtest_path import aco_shortest_path
 from . import building_bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.database.db_instance import db
-from flask import send_from_directory
+from src.utils.aco.aco_nearest_node import aco_nearest_node
+from src.utils.aco.aco_shortest_path import aco_shortest_path
+from src.utils.aco.aco_shortest_path_geo import aco_shortest_path_geo
 
 @building_bp.route('/node', methods=['GET'])
 def get_buildings():
@@ -38,8 +37,7 @@ def handle_navigate_building():
             for each_building in range(len(raw_buildings)):
                 buildings.append(raw_buildings[each_building].to_dict())
 
-            
-            
+    
             # buildings = buildings
             # use aco to find best path
             aco_navigation_path = aco_shortest_path(
@@ -92,8 +90,74 @@ def handle_navigate_building():
         else:
             return jsonify({'message': 'bid_start or bid_goal is required'}), HTTP_400_BAD_REQUEST
     except BaseException as e:
+        print(e)
         return jsonify({'message': 'navigate to building was failed'}), HTTP_400_BAD_REQUEST
 
+@building_bp.post("/navigate/geo")
+def handle_navigate_geo_building():
+    payload = request.get_json().get('payload', '')
+    try:
+        if 'goal_state' in payload and 'start_state' in payload:
+            start_state = payload['start_state']
+            # print(start_state)
+            bid_goal =payload['goal_state']
+           
+            # print(bid_start, bid_goal)
+            raw_buildings = BuildingModel.query.all()
+            buildings = []
+            for each_building in range(len(raw_buildings)):
+                buildings.append(raw_buildings[each_building].to_dict())
+
+            aco_navigation_path = aco_shortest_path_geo(buildings, start_state, bid_goal)
+
+            best_path = aco_navigation_path['best_path']
+            navigate_data = []
+            for node in best_path:
+                building_model = BuildingModel.query.filter_by(bid=node).first()
+                building = building_model.to_dict()
+                navigate_data.append({
+                    'bid':building['bid'],
+                    'lat':building['lat'],
+                    'is_node':building['is_node'],
+                    'lng':building['lng'],
+                })
+            # สกัดเอาแค่ โหนดเริ่มต้นจนถึงโหนดเป้าหมาย
+            new_best_path = []
+            for node in best_path:
+                if(node != bid_goal):
+                    new_best_path.append(node)
+                else:
+                    new_best_path.append(node)
+                    break
+            new_navigate_data = []
+            for node in navigate_data:
+                if(node['bid']!=bid_goal):
+                    new_navigate_data.append(node)
+                else:
+                    new_navigate_data.append(node)
+                    break
+          
+            coordinates = []
+            for n in (new_navigate_data):
+                c = [float(n['lat']), float(n['lng'])]
+                coordinates.append(c)
+
+            return jsonify({
+                'message': 'Building navigate successfully',
+                'payload': {
+                    "from_start": start_state,
+                    "to_goal": bid_goal,
+                    "distance": aco_navigation_path['distance'],
+                    "best_path": new_best_path,
+                    "navigation":new_navigate_data,
+                    "coordinates": coordinates
+                }
+            }), HTTP_200_OK
+        else:
+            return jsonify({'message': 'bid_start or bid_goal is required'}), HTTP_400_BAD_REQUEST
+    except BaseException as e:
+        print(e)
+        return jsonify({'message': 'navigate to building was failed'}), HTTP_400_BAD_REQUEST
 
 @building_bp.post("/nearest")
 def handle_nearest_building():
@@ -353,21 +417,17 @@ def upload_image(bid):
         except Exception as e:
             print(f"Error deleting old image: {e}")
         building.image = unique_filename
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': f'Error updating database: {e}'}), HTTP_500_INTERNAL_SERVER_ERROR
 
     return  jsonify({'message': 'File uploaded successfully', 'payload': unique_filename}), HTTP_200_OK
 
 
 
-@building_bp.route('/images/<filename>', methods=['GET'])
-def get_building_image(filename):
-    try:
-        path = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], 'buildings')        
-        return send_from_directory(path, filename)
-    except FileNotFoundError:
-        return jsonify({'message': 'File not found'}), HTTP_404_NOT_FOUND
-    except Exception as e:
-        return jsonify({'message': f'Error: {e}'}), HTTP_500_INTERNAL_SERVER_ERROR
+
 
 
 

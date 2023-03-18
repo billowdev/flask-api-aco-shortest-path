@@ -3,7 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["localhost", 'fastly.picsum.photos', 'picsum.photos'],
+    domains: ["localhost",  'localhost:5000', 'fastly.picsum.photos', 'picsum.photos'],
+
   },
 }
 

@@ -6,11 +6,11 @@ import { Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { GetStaticProps } from 'next';
 import axios from 'axios';
-import { ENDPOINT } from '@/common/constants/common.constant';
 import ModalList from '@/components/ModalList';
 import { LatLngBoundsExpression, LatLngExpression } from 'leaflet';
 import { BuildingPayload } from '@/models/buildings.model';
-
+import Image from 'next/image';
+import { BUILDING_IMAGE_ROUTE, ENDPOINT} from '@/utils/constant';
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
   ssr: false, // disable server-side rendering
@@ -160,9 +160,13 @@ function Navigation({ nodes, buildings }: Props) {
                 <h3>{bid}</h3>
                 <h3>{name}</h3>
                 <p>{desc}</p>
-                <p>{`${process.env.NEXT_PUBLIC_API_BUILDING_IMAGE}/${image}`}</p>
-                
-            
+                <p>{`${BUILDING_IMAGE_ROUTE}/${image}`}</p>
+                <Image
+								src={`${BUILDING_IMAGE_ROUTE}/${image}`}                
+								alt="My Image"
+								width={100}
+								height={100}
+							/>
               </div>
             </Popup>
           </Marker>

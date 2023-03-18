@@ -1,5 +1,8 @@
 from contextlib import suppress
-from flask import Flask, render_template
+import os
+from flask import Flask, current_app, jsonify, render_template, send_from_directory
+
+from src.constatns.http_status_codes import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 from .utils.password_hasher import password_hasher, verify_password
 from .database.db_instance import db
 from .database.seeders import building_seeder
@@ -105,5 +108,17 @@ def create_app():
     @app.get("/login")
     def login():
         return render_template('login.html')
+
+    @app.get('/buildings/images/<filename>')
+    def get_building_image(filename):
+        try:
+            print( current_app.config['UPLOAD_FOLDER'])
+            path = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], 'buildings')        
+            return send_from_directory(path, filename)
+        except FileNotFoundError:
+            return jsonify({'message': 'File not found'}), HTTP_404_NOT_FOUND
+        except Exception as e:
+            return jsonify({'message': f'Error: {e}'}), HTTP_500_INTERNAL_SERVER_ERROR
+
 
     return app
