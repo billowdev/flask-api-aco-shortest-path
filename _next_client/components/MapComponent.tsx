@@ -31,9 +31,6 @@ const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
 
 
 interface NavigationMapProps {
-
-
-
 	bestPath: string[];
 	coordinates: [number, number][];
 	navigation: {
@@ -54,43 +51,47 @@ const CustomNavigationMap = (
 ) => {
 
 
-
 	const [isBrowser, setIsBrowser] = React.useState(false);
 	React.useEffect(() => {
 		setIsBrowser(true);
 	}, []);
 
-	
 
 
-
-	const dispatch: any = useAppDispatch();
-
-
-	React.useEffect(() => {
-		dispatch(getNavigation({ start: "G1", goal: "C1" }))
-
-	}, [dispatch]);
-
-
-	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
-	useEffect(() => {
-		navigator.geolocation.getCurrentPosition(
-			position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
-			error => console.log(error)
-		);
-	}, []);
+	// const dispatch: any = useAppDispatch();
 
 
 	// React.useEffect(() => {
-	// 	let counter = 0;
+	// 	dispatch(getNavigation({ start: "G1", goal: "C1" }))
+
+	// }, [dispatch]);
+
+
+	const [currentPosition, setCurrentPosition] = useState<[number, number]>([17.189578289590823, 104.090411954494540]); // initialize with dummy values
+	// get current every 3 second
+	// useEffect(() => {
 	// 	const intervalId = setInterval(() => {
-	// 		setCurrentPosition([coordinates[counter][0], coordinates[counter][1]]);
-	// 		counter = (counter + 1) % coordinates.length;
-	// 	}, 1000);
+	// 		navigator.geolocation.getCurrentPosition(
+	// 			position => setCurrentPosition([position.coords.latitude, position.coords.longitude]),
+	// 			error => console.log(error)
+	// 		);
+	// 	}, 3000);
 
 	// 	return () => clearInterval(intervalId);
-	// }, [coordinates]);
+	// }, []);
+
+
+	// simulate curent from coordinate 
+
+	React.useEffect(() => {
+		let counter = 0;
+		const intervalId = setInterval(() => {
+			setCurrentPosition([coordinates[counter][0], coordinates[counter][1]]);
+			counter = (counter + 1) % coordinates.length;
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, [coordinates]);
 
 
 

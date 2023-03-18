@@ -33,3 +33,10 @@ export interface NavigationPayloadType {
 }
 
 export type NavigationArrayType = NavigationPayloadType[]
+
+
+export type BuildingsResponse = {
+	message: string;
+	payload: string[][];
+  };
+  

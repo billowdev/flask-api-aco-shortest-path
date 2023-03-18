@@ -4,7 +4,6 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: ["localhost", 'fastly.picsum.photos', 'picsum.photos'],
-
   },
 }
 

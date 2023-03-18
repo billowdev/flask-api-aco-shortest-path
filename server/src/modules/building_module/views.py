@@ -11,6 +11,13 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.database.db_instance import db
 
 
+@building_bp.route('/node', methods=['GET'])
+def get_buildings():
+    nodes = BuildingModel.query.filter_by(is_node=True).all()
+    node_bids = [node.bid for node in nodes]
+    return jsonify({"message": "Buildings retrieved successfully", "payload": [node_bids]})
+
+
 @building_bp.route("/navigate", methods=['POST'])
 def handle_navigate_building():
     payload = request.get_json().get('payload', '')
@@ -18,18 +25,20 @@ def handle_navigate_building():
         if 'bid_start' in payload and 'bid_goal' in payload:
             bid_start = payload['bid_start']
             bid_goal = payload['bid_goal']
+           
             # print(bid_start, bid_goal)
             raw_buildings = BuildingModel.query.all()
             buildings = []
             for each_building in range(len(raw_buildings)):
                 buildings.append(raw_buildings[each_building].to_dict())
 
-            # print(buildings)
+            
+            
             # buildings = buildings
             # use aco to find best path
             aco_navigation_path = aco_shortest_path(
                 buildings, bid_start, bid_goal)
-
+            # print(aco_navigation_path)
             best_path = aco_navigation_path['best_path']
             navigate_data = []
             for node in best_path:
