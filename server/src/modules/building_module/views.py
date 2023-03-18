@@ -335,4 +335,4 @@ def upload_image(building_id):
         building.image = filename
         db.session.commit()
 
-    return 'File uploaded successfully', 200
+    return  jsonify({'message': 'File uploaded successfully', 'payload': filename}), HTTP_200_OK
