@@ -1,4 +1,5 @@
 import decimal
+import os
 from flask import jsonify, request
 from src.constatns.http_status_codes import HTTP_201_CREATED
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
@@ -6,7 +7,7 @@ from src.modules.building_module.models import BuildingModel
 from src.modules.user_module.models import UserModel
 from src.utils.aco.aco_nearest_node import aco_nearest_node
 from src.utils.aco.aco_nearest_node_geo_location import aco_nearest_node_geo_location
-
+from werkzeug.utils import secure_filename
 from src.utils.aco.aco_shourtest_path import aco_shortest_path
 from . import building_bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -15,9 +16,12 @@ from src.database.db_instance import db
 
 @building_bp.route('/node', methods=['GET'])
 def get_buildings():
-    nodes = BuildingModel.query.filter_by(is_node=True).all()
-    node_bids = [node.bid for node in nodes]
-    return jsonify({"message": "Buildings retrieved successfully", "payload": [node_bids]})
+    try:
+        nodes = BuildingModel.query.filter_by(is_node=True).all()
+        node_bids = [node.bid for node in nodes]
+        return jsonify({"message": "Buildings retrieved successfully", "payload": [node_bids]}), 200
+    except Exception as e:
+        return jsonify({"message": f"Error: {e}"}), 500
 
 
 @building_bp.route("/navigate", methods=['POST'])
@@ -153,8 +157,8 @@ def handle_find_nearest_building():
         print(e)
         return jsonify({'message': 'find nearest building was failed'}), HTTP_400_BAD_REQUEST
     
-@building_bp.route("/get", methods=["GET"])
-def handle_get_buildings():
+@building_bp.route("/get/all", methods=["GET"])
+def handle_get_all_buildings():
     buildings = BuildingModel.query.all()
     data: list = []
     for building in buildings:
@@ -162,6 +166,7 @@ def handle_get_buildings():
             'id': building.id,
             'name': building.name,
             'bid': building.bid,
+            'image':building.image,
             'is_node': building.is_node,
             'desc': building.desc,
             'lat': building.lat,
@@ -170,7 +175,28 @@ def handle_get_buildings():
 
     return jsonify({
         "msg": "get building successfully",
-        "paylolad": data
+        "payload": data
+    }), HTTP_200_OK
+
+@building_bp.route("/get/all/node", methods=["GET"])
+def handle_get_node_buildings():
+    buildings = BuildingModel.query.filter_by(is_node=True).all()
+    data: list = []
+    for building in buildings:
+        data.append({
+            'id': building.id,
+            'name': building.name,
+            'bid': building.bid,
+            'image':building.image,
+            'is_node': building.is_node,
+            'desc': building.desc,
+            'lat': building.lat,
+            'lng': building.lng,
+        })
+
+    return jsonify({
+        "msg": "get building successfully",
+        "payload": data
     }), HTTP_200_OK
 
 
@@ -288,3 +314,25 @@ def handle_delete_building(building_id):
         return jsonify({'message': 'delete building failed'}), HTTP_400_BAD_REQUEST
 
     return jsonify({'message': 'Building deleted successfully'}), HTTP_200_OK
+
+@building_bp.route('/upload-image/<int:building_id>', methods=['POST'])
+def upload_image(building_id):
+    if 'image' not in request.files:
+        return 'No file uploaded', 400
+
+    file = request.files['image']
+    if file.filename == '':
+        return 'No file selected', 400
+
+    # save the file to the server
+    filename = secure_filename(file.filename)
+    filepath = os.path.join('public', 'upload', 'buildings', filename)
+    file.save(filepath)
+
+    # update the BuildingModel record with the image filename
+    building = BuildingModel.query.get(building_id)
+    if building:
+        building.image = filename
+        db.session.commit()
+
+    return 'File uploaded successfully', 200
