@@ -126,7 +126,6 @@ def handle_nearest_building():
 @building_bp.post("/me/nearest")
 def handle_find_nearest_building():
     payload = request.get_json()
-    
     try:
         if 'current' in payload:
             current = payload['current']

@@ -7,5 +7,5 @@ def run_seed():
 	building_seeder.seed()
 	user_seeder.seed()
 	# link_node_G1_E1.seed()
-	# link_node_G1_A18.seed()
+	link_node_G1_A18.seed()
  
