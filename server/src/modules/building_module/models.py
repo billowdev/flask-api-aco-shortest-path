@@ -10,6 +10,7 @@ class BuildingModel(db.Model):
 	name = db.Column(db.Text, nullable=False)
 	desc = db.Column(db.Text, nullable=False)
 	is_node = db.Column(db.Boolean, nullable=False, default=False)
+	image = db.Column(db.String(255), nullable=True)
 	lat = db.Column(db.Numeric(precision=18, scale=15), nullable=False)
 	lng = db.Column(db.Numeric(precision=18, scale=15), nullable=False)
 	created_at = db.Column(db.DateTime, default=datetime.datetime.now())
@@ -41,6 +42,7 @@ class BuildingModel(db.Model):
 			'name': self.name,
 			'is_node':self.is_node,
 			'desc': self.desc,
+			'image': self.image,
 			'lat': self.lat,
 			'lng': self.lng,
 		}
