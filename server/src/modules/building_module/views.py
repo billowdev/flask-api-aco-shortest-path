@@ -1,7 +1,7 @@
 import decimal
 import os
 from flask import current_app, jsonify, request
-from src.constatns.http_status_codes import HTTP_201_CREATED
+from src.constatns.http_status_codes import HTTP_201_CREATED, HTTP_500_INTERNAL_SERVER_ERROR
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 from src.modules.building_module.models import BuildingModel
 from src.modules.user_module.models import UserModel
@@ -359,11 +359,15 @@ def upload_image(bid):
 
 
 
-
-@building_bp.route('/uploads/buildings/<filename>')
+@building_bp.route('/images/<filename>', methods=['GET'])
 def get_building_image(filename):
-    # os.path.join(current_app.config['UPLOAD_FOLDER'], 'buildings', filename)
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], 'buildings', filename)
+    try:
+        path = os.path.join(os.getcwd(), current_app.config['UPLOAD_FOLDER'], 'buildings')        
+        return send_from_directory(path, filename)
+    except FileNotFoundError:
+        return jsonify({'message': 'File not found'}), HTTP_404_NOT_FOUND
+    except Exception as e:
+        return jsonify({'message': f'Error: {e}'}), HTTP_500_INTERNAL_SERVER_ERROR
 
 
 

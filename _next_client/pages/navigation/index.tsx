@@ -160,7 +160,8 @@ function Navigation({ nodes, buildings }: Props) {
                 <h3>{bid}</h3>
                 <h3>{name}</h3>
                 <p>{desc}</p>
-                <p>{image}</p>
+                <p>{`${process.env.NEXT_PUBLIC_API_BUILDING_IMAGE}/${image}`}</p>
+                
             
               </div>
             </Popup>
