@@ -22,6 +22,7 @@ def create_app():
     # set up database URI based on the environment
     if app.config['ENV'] == 'development':
         app.config.from_mapping(
+            UPLOAD_FOLDER= common_config.UPLOAD_FOLDER,
             SECRET_KEY=common_config.SECRET_KEY,
             SQLALCHEMY_DATABASE_URI=common_config.SQLALCHEMY_DB_URI_DEV,
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
@@ -29,6 +30,7 @@ def create_app():
         )
     elif app.config['ENV'] == 'production':
         app.config.from_mapping(
+            UPLOAD_FOLDER= common_config.UPLOAD_FOLDER,
             SECRET_KEY=common_config.SECRET_KEY,
             SQLALCHEMY_DATABASE_URI=common_config.SQLALCHEMY_DB_URI_PROD,
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
@@ -36,6 +38,7 @@ def create_app():
         )
     elif app.config['ENV'] == 'testing':
         app.config.from_mapping(
+            UPLOAD_FOLDER= common_config.UPLOAD_FOLDER,
             SECRET_KEY=common_config.SECRET_KEY,
             SQLALCHEMY_DATABASE_URI=common_config.SQLALCHEMY_DB_URI_TEST,
             SQLALCHEMY_TRACK_MODIFICATIONS=False,

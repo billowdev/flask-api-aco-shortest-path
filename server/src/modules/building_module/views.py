@@ -1,6 +1,6 @@
 import decimal
 import os
-from flask import jsonify, request
+from flask import current_app, jsonify, request
 from src.constatns.http_status_codes import HTTP_201_CREATED
 from src.constatns.http_status_codes import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 from src.modules.building_module.models import BuildingModel
@@ -12,7 +12,7 @@ from src.utils.aco.aco_shourtest_path import aco_shortest_path
 from . import building_bp
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.database.db_instance import db
-
+from flask import send_from_directory
 
 @building_bp.route('/node', methods=['GET'])
 def get_buildings():
@@ -203,11 +203,8 @@ def handle_get_node_buildings():
 @building_bp.route("/create", methods=['POST'])
 @jwt_required()
 def handle_create_buildings():
-
     current_user_id = get_jwt_identity()
-    # data = request.get_json()
     user = UserModel.query.filter_by(id=current_user_id).first()
-    # user = user.to_dict()
 
     if not user or not user.is_admin():
         return jsonify({'message': 'Forbidden'}), HTTP_403_FORBIDDEN
@@ -217,17 +214,37 @@ def handle_create_buildings():
     # bid = body
     if BuildingModel.query.filter_by(bid=payload['bid']).first():
         return jsonify({'message': 'Building or that node is already exists'}), HTTP_409_CONFLICT
+
     try:
+        # check if image is included in request files
+        if 'image' in request.files:
+            file = request.files['image']
+            if file.filename != '':
+                # save the file to the server
+                # filename = secure_filename(file.filename) 
+                # unique_filename = f"{payload['bid']}_{filename}"
+                unique_filename = secure_filename(str(payload['bid']) + '_' + file.filename)
+                # filepath = os.path.join('public', 'upload', 'buildings', unique_filename)
+                filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], 'buildings', unique_filename)
+                file.save(filepath)
+                image_filename = unique_filename
+        else:
+            image_filename = None
+
         building = BuildingModel(
             bid=payload['bid'],
             name=payload['name'],
             desc=payload['desc'],
             lat=payload['lat'],
-            lng=payload['lng']
+            lng=payload['lng'],
+            image=image_filename
         )
+
         db.session.add(building)
         db.session.commit()
+
         return jsonify({'message': 'Building was created successfully', 'payload': building.to_dict()}), HTTP_201_CREATED
+
     except KeyError as e:
         key_error = ['bid', 'name', 'desc', 'lat', 'lng']
         if str(e)[1:-1] in key_error:
@@ -235,12 +252,10 @@ def handle_create_buildings():
         else:
             print("other key error")
         return jsonify({'message': f'create building was failed that {str(e)[1:-1]} key error'}), HTTP_400_BAD_REQUEST
+
     except BaseException as e:
         print("other exception occurred")
         print(e)
-        # if(e == 'desc'):
-        #     print("erorr - desc")
-
         return jsonify({'message': 'create building was failed'}), HTTP_400_BAD_REQUEST
 
 
@@ -315,8 +330,8 @@ def handle_delete_building(building_id):
 
     return jsonify({'message': 'Building deleted successfully'}), HTTP_200_OK
 
-@building_bp.route('/upload-image/<int:building_id>', methods=['POST'])
-def upload_image(building_id):
+@building_bp.route('/upload-image/<string:bid>', methods=['POST'])
+def upload_image(bid):
     if 'image' not in request.files:
         return 'No file uploaded', 400
 
@@ -325,14 +340,30 @@ def upload_image(building_id):
         return 'No file selected', 400
 
     # save the file to the server
-    filename = secure_filename(file.filename)
-    filepath = os.path.join('public', 'upload', 'buildings', filename)
+    unique_filename = secure_filename(str(bid) + '_' + file.filename)
+    filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], 'buildings', unique_filename)
     file.save(filepath)
 
     # update the BuildingModel record with the image filename
-    building = BuildingModel.query.get(building_id)
+    building = BuildingModel.query.filter_by(bid=bid).first()
     if building:
-        building.image = filename
+        # delete old image if it exists
+        try:
+            os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], 'buildings', building.image))
+        except Exception as e:
+            print(f"Error deleting old image: {e}")
+        building.image = unique_filename
         db.session.commit()
 
-    return  jsonify({'message': 'File uploaded successfully', 'payload': filename}), HTTP_200_OK
+    return  jsonify({'message': 'File uploaded successfully', 'payload': unique_filename}), HTTP_200_OK
+
+
+
+
+@building_bp.route('/uploads/buildings/<filename>')
+def get_building_image(filename):
+    # os.path.join(current_app.config['UPLOAD_FOLDER'], 'buildings', filename)
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], 'buildings', filename)
+
+
+
