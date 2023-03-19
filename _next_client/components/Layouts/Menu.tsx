@@ -92,10 +92,9 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
           sx={{ backgroundColor: blue }}
         >
           <Image
-            src="/static/img/billowdev_logo.png"
+            src="/static/img/logo-horizontal.png"
             width={200}
             height={40}
-            objectFit="contain"
             alt="logo"
           />
           <IconButton onClick={onDrawerClose}>
@@ -138,7 +137,6 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
 
 <Link href="/timer" passHref>
           <ListItem
-            button
             className={router.pathname === "/" ? "Mui-selected" : ""}
           >
             <ListItemIcon>
