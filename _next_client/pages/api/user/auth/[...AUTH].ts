@@ -3,7 +3,7 @@ import {
 	HTTP_METHOD_POST,
 	HTTP_METHOD_GET,
 	ACCESS_TOKEN_KEY,
-} from "@/utils/constant";
+} from "@/utils/constant.util";
 import { clearCookie, setCookie } from "@/utils/cookies.util";
 import httpClient from "@/utils/httpClient.util";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -32,10 +32,11 @@ async function signin(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
 		const { username, password } = req.body
 		const response = await httpClient.post(`/users/login`, { username, password });
-		const { token } = response.data;
-		setCookie(res, ACCESS_TOKEN_KEY, token, {
+		const { access_token } = response.data.user;
+	
+		setCookie(res, ACCESS_TOKEN_KEY, access_token, {
 			httpOnly: true,
-			secure: process.env.NODE_ENV !== "development",
+			// secure: process.env.NODE_ENV !== "development",
 			sameSite: "strict",
 			path: "/",
 		});
@@ -48,7 +49,6 @@ async function signin(req: NextApiRequest, res: NextApiResponse<any>) {
 const signout = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 	clearCookie(res, ACCESS_TOKEN_KEY);
 	res.json({ result: "signout successfuly" });
-
 }
 
 const getSession = async (req: NextApiRequest, res: NextApiResponse<any>) => {
@@ -60,8 +60,7 @@ const getSession = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 			const response = await httpClient.get<GetSessionResponse>(`/users/getsession`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
-
-			res.json(response.data);
+			res.status(200).json(response.data);
 		} else {
 			res.json({ success: false, msg: "something wentwrong" });
 		}

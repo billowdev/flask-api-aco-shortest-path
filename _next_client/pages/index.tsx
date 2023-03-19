@@ -9,12 +9,12 @@ import ModalList from '@/components/ModalList';
 import { LatLngBoundsExpression, LatLngExpression } from 'leaflet';
 import { BuildingPayload } from '@/models/building.model';
 import Image from 'next/image';
-import { BUILDING_IMAGE_ROUTE, ENDPOINT } from '@/utils/constant';
+import { BUILDING_IMAGE_ROUTE, ENDPOINT } from '@/utils/constant.util';
 import Footer from '@/components/Footer';
 import { Box } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-
+import Layout from "@/components/Layouts/Layout";
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import PlaceIcon from '@mui/icons-material/Place';
@@ -121,7 +121,8 @@ function Navigation({ nodes, buildings }: Props) {
   const isSmallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <Box>
+       <Box>
+
       <Container style={{
         marginTop: "20px"
       }}>
@@ -219,6 +220,7 @@ function Navigation({ nodes, buildings }: Props) {
 
       <Footer />
     </Box>
+
   )
 }
 

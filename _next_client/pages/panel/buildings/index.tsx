@@ -191,13 +191,7 @@ const BuildingPage = ({ }: Props) => {
           >
             <EditIcon fontSize="inherit" />
           </IconButton>
-          <IconButton
-            aria-label="start"
-            size="large"
-            onClick={() => router.push("/building/" + row.id)}
-          >
-            <PlayCircleFilledWhiteIcon fontSize="inherit" />
-          </IconButton>
+        
         </Stack>
       ),
     },

@@ -2,7 +2,7 @@ import axios from "axios";
 import httpClient from "../utils/httpClient.util";
 import { NodeResponse } from '../models/navigation.model';
 import { BuildingResponse } from "@/models/building.model";
-import {  ENDPOINT} from '@/utils/constant';
+import {  ENDPOINT} from '@/utils/constant.util';
 
 export const getNavigation = async (data: any): Promise<any> => {
 	const start_state = data.start

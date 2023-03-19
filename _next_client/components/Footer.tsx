@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, Grid, Link, Box, Button } from "@material-
 import { Info, Security } from "@mui/icons-material";
 
 const Footer = () => (
-  <Box sx={{ width: "100vw"}} >
+  <Box>
     <AppBar position="static" elevation={0} component="footer" color="primary" >
       <Toolbar style={{ justifyContent: "center" }}>
         <Typography variant="caption">

@@ -54,7 +54,6 @@ const buildingSlice = createSlice({
     });
 
 
-
   },
 });
 

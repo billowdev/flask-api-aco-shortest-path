@@ -26,8 +26,8 @@ type signProps = {
   
   export const getSession = async (): Promise<SessionPayload> => {
 	const response = await httpClient.get(`/user/auth/session`, {
-	  baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
-	});
-
+		baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
+	  });
+	 
 	return response.data;
   };

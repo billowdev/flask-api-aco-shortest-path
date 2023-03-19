@@ -373,12 +373,11 @@ def handle_update_building(building_id):
     return jsonify({'message': 'Building updated successfully'}), HTTP_200_OK
 
 
-@building_bp.route("/delete/<int:building_id>", methods=['DELETE'])
+@building_bp.delete("/delete/<int:building_id>")
 @jwt_required()
 def handle_delete_building(building_id):
     current_user_id = get_jwt_identity()
     user = UserModel.query.filter_by(id=current_user_id).first()
-
     if not user or not user.is_admin():
         return jsonify({'message': 'Forbidden'}), HTTP_403_FORBIDDEN
 
@@ -389,10 +388,11 @@ def handle_delete_building(building_id):
     try:
         db.session.delete(building)
         db.session.commit()
+        return jsonify({'message': 'Building deleted successfully'}), HTTP_200_OK
     except BaseException as e:
         return jsonify({'message': 'delete building failed'}), HTTP_400_BAD_REQUEST
 
-    return jsonify({'message': 'Building deleted successfully'}), HTTP_200_OK
+    
 
 
 

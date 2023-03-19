@@ -19,3 +19,5 @@ export const setCookie = (res: NextApiResponse, name: string, value: unknown, op
 export const clearCookie = (res: NextApiResponse, name: string, path = '/') => {
   res.setHeader('Set-Cookie', serialize(name, '', { maxAge: 0, path }))
 }
+
+

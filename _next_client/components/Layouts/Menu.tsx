@@ -137,7 +137,7 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
 
         <Divider />
 
-<Link href="/timer" passHref>
+  <Link href="/" passHref>
           <ListItem
             className={router.pathname === "/" ? "Mui-selected" : ""}
           >
