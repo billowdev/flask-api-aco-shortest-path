@@ -394,6 +394,8 @@ def handle_delete_building(building_id):
 
     return jsonify({'message': 'Building deleted successfully'}), HTTP_200_OK
 
+
+
 @building_bp.route('/upload-image/<string:bid>', methods=['POST'])
 def upload_image(bid):
     if 'image' not in request.files:

@@ -2,7 +2,7 @@ import React from 'react'
 import dynamic from "next/dynamic";
 import { useEffect, useState } from 'react';
 import * as navigationService from "@/services/navigationService"
-import { Button, Grid } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { GetStaticProps } from 'next';
 import ModalList from '@/components/ModalList';
@@ -10,6 +10,10 @@ import { LatLngBoundsExpression, LatLngExpression } from 'leaflet';
 import { BuildingPayload } from '@/models/building.model';
 import Image from 'next/image';
 import { BUILDING_IMAGE_ROUTE, ENDPOINT } from '@/utils/constant';
+import Footer from '@/components/Footer';
+import { Box } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
   ssr: false, // disable server-side rendering
@@ -32,17 +36,11 @@ type Props = {
   buildings: BuildingPayload[]
 }
 
-const useStyles = makeStyles({
-  root: {
-    margin: "20px",
-  },
-});
-
 
 
 function Navigation({ nodes, buildings }: Props) {
 
-  const classes = useStyles();
+
 
   const center: LatLngExpression = [17.188552015996446, 104.08972433221602]; // Centered on Sakon Nakhon Province
   const zoom: number = 16;
@@ -108,89 +106,114 @@ function Navigation({ nodes, buildings }: Props) {
       loading: () => <p>A map is loading</p>,
       ssr: false // This line is important. It's what prevents server-side render
     }
+
+
   ), [/* list variables which should trigger a re-render here */
 
   ])
 
- 
+  const theme = useTheme();
+  const isSmallerScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={hadnleCurrentLocation}>
-            ตำแหน่งปัจจุบัน
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={handleModalOpen}>
-            เลือกปลายทาง
-          </Button>
-          <ModalList open={modalOpen} onClose={handleModalClose} onSelect={handleNodeSelect} nodes={nodes} />
-        </Grid>
+    <Box>
+      <Container style={{
+        marginTop: "20px"
+      }}>
+        <Grid container style={{
+          marginBottom: "20px",
+          justifyContent: "center",
+        }}>
+          <Grid item style={{ margin: isSmallerScreen ? "10px 0" : "0 10px" }}>
+            <Button variant="contained" color="primary" onClick={hadnleCurrentLocation}>
+              ตำแหน่งปัจจุบัน
+            </Button>
+          </Grid>
+          <Grid item style={{ margin: isSmallerScreen ? "10px 0" : "0 10px" }}>
+            <Button variant="contained" color="primary" onClick={handleModalOpen}>
+              เลือกปลายทาง
+            </Button>
+            <ModalList open={modalOpen} onClose={handleModalClose} onSelect={handleNodeSelect} nodes={buildings} />
+          </Grid>
+          <Grid item style={{ margin: isSmallerScreen ? "10px 0" : "0 10px" }}>
+            <Button variant="contained" color="primary" onClick={handleFetchData}>
+              เริ่มต้นนำทาง
+            </Button>
+          </Grid>
 
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={handleFetchData}>
-            เริ่มต้นนำทาง
-          </Button>
         </Grid>
-
-        <Grid item>
+        <Box marginBottom={1}>
           {selectedNode && (
-            <h5>ปลายทาง: {selectedNode}</h5>
+            <>
+              <Typography variant="h5" gutterBottom>
+                ปลายทาง
+              </Typography>
+              <Box marginTop={1}>
+                {buildings
+                  .filter(({ bid }) => bid === selectedNode)
+                  .map((building) => (
+                    <Box key={building.id}>
+                      <Typography> Building ID: {building.bid}</Typography>
+                      <Typography> Name: {building.name}</Typography>
+                    </Box>
+                  ))}
+              </Box>
+            </>
           )}
-        </Grid>
+        </Box>
 
-      </Grid>
-      {payload.best_path.length > 0 ? (
-        <Map
-          bestPath={payload.best_path}
-          coordinates={payload.coordinates}
-          navigation={payload.navigation}
-        />
-      ) : (
-        <MapContainer
-          center={center}
-          zoom={zoom}
-          bounds={bounds}
-          scrollWheelZoom={true}
-          style={{
-            height: "100vh",
-            width: "100%"
-          }}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          <Marker position={currentPosition} autoPanOnFocus autoPan>
-            <Popup>
-              <div>
-                <h3>ตำแหน่งปัจจุบันของคุณ</h3>
-              </div>
-            </Popup>
-          </Marker>
+        {payload.best_path.length > 0 ? (
+          <Map
+            bestPath={payload.best_path}
+            coordinates={payload.coordinates}
+            navigation={payload.navigation}
+          />
+        ) : (
+          <MapContainer
+            center={center}
+            zoom={zoom}
+            bounds={bounds}
+            scrollWheelZoom={true}
+            style={{
+              height: "100vh",
+              width: "100%",
+              marginBottom: "20px"
+            }}
 
-          {buildings.map(({ bid, name, desc, lat, lng, image }) => (
-            <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}>
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <Marker position={currentPosition} autoPanOnFocus autoPan>
               <Popup>
                 <div>
-                  <h3>{bid}</h3>
-                  <h3>{name}</h3>
-                  <p>{desc}</p>
-                  <Image
-                    src={`${BUILDING_IMAGE_ROUTE}/${image}`}
-                    alt="My Image"
-                    width={100}
-                    height={100}
-                  />
+                  <h3>ตำแหน่งปัจจุบันของคุณ</h3>
                 </div>
               </Popup>
             </Marker>
-          ))}
-        </MapContainer>
-      )
-      }
 
+            {buildings.map(({ bid, name, desc, lat, lng, image }) => (
+              <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}>
+                <Popup>
+                  <div>
+                    <h3>{bid}</h3>
+                    <h3>{name}</h3>
+                    <p>{desc}</p>
+                    <Image
+                      src={`${BUILDING_IMAGE_ROUTE}/${image}`}
+                      alt="My Image"
+                      width={100}
+                      height={100}
+                    />
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        )
+        }
+      </Container>
 
-    </div>
+      <Footer />
+    </Box>
   )
 }
 

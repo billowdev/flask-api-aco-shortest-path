@@ -1,11 +1,11 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Backdrop, Fade, List, ListItem, ListItemText } from '@material-ui/core';
-
+import {BuildingPayload} from "@/models/building.model";
 type Props = {
   open: boolean;
   onClose: () => void;
-  nodes: string[];
+  nodes: BuildingPayload[];
   onSelect: (node: string) => void;
 };
 
@@ -44,11 +44,11 @@ function ModalList({ open, onClose, nodes, onSelect }: Props) {
     >
       <Fade in={open}>
         <div className={classes.paper}>
-          <h2>Select a node</h2>
+          <h2>เลือกปลายทาง</h2>
           <List component="nav">
             {nodes.map((node, index) => (
-              <ListItem button key={index} onClick={() => handleListItemClick(node)}>
-                <ListItemText primary={node} />
+              <ListItem button key={index} onClick={() => handleListItemClick(node.bid)}>
+                <ListItemText primary={node.name} />
               </ListItem>
             ))}
           </List>
