@@ -92,7 +92,9 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
           sx={{ backgroundColor: blue }}
         >
           <Image
-            src="/static/img/logo-horizontal.png"
+            // src="/static/img/logo-horizontal.png"
+            src="/static/img/logo-h.png"
+            
             width={200}
             height={40}
             alt="logo"
