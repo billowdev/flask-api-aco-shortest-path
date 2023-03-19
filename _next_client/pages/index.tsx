@@ -15,6 +15,11 @@ import { Box } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
+import MyLocationIcon from '@mui/icons-material/MyLocation';
+import NavigationIcon from '@mui/icons-material/Navigation';
+import PlaceIcon from '@mui/icons-material/Place';
+import PersonIcon from '@mui/icons-material/Person';
+
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
   ssr: false, // disable server-side rendering
 });
@@ -126,18 +131,18 @@ function Navigation({ nodes, buildings }: Props) {
         }}>
           <Grid item style={{ margin: isSmallerScreen ? "10px 0" : "0 10px" }}>
             <Button variant="contained" color="primary" onClick={hadnleCurrentLocation}>
-              ตำแหน่งปัจจุบัน
+             <MyLocationIcon /> ตำแหน่งปัจจุบัน
             </Button>
           </Grid>
           <Grid item style={{ margin: isSmallerScreen ? "10px 0" : "0 10px" }}>
             <Button variant="contained" color="primary" onClick={handleModalOpen}>
-              เลือกปลายทาง
+             <PlaceIcon /> เลือกปลายทาง
             </Button>
             <ModalList open={modalOpen} onClose={handleModalClose} onSelect={handleNodeSelect} nodes={buildings} />
           </Grid>
           <Grid item style={{ margin: isSmallerScreen ? "10px 0" : "0 10px" }}>
             <Button variant="contained" color="primary" onClick={handleFetchData}>
-              เริ่มต้นนำทาง
+             <NavigationIcon /> เริ่มต้นนำทาง
             </Button>
           </Grid>
 

@@ -22,6 +22,10 @@ import TimerIcon from "@mui/icons-material/Timer";
 import { userSelector } from "@/store/slices/userSlice";
 import { useSelector } from "react-redux";
 import LoginIcon from '@mui/icons-material/Login';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
+import NavigationIcon from '@mui/icons-material/Navigation';
+import PlaceIcon from '@mui/icons-material/Place';
+import PersonIcon from '@mui/icons-material/Person';
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -106,80 +110,45 @@ export default function Menu({ open, onDrawerClose }: MenuProp) {
 
       <Divider />
       <List>
-        {/* {userData && userData?.username && (
-          <>
-    
-            <Link href="/team" passHref>
-              <ListItem
-                button
-                className={router.pathname === "/team" ? "Mui-selected" : ""}
-              >
-                <ListItemIcon>
-                  <GroupsIcon />
-                </ListItemIcon>
-                <ListItemText primary="จัดการทีม" />
-              </ListItem>
-            </Link>
-
-     
-            <Link href="/history" passHref>
-              <ListItem
-                button
-                className={router.pathname === "/history" ? "Mui-selected" : ""}
-              >
-                <ListItemIcon>
-                  <HistoryIcon />
-                </ListItemIcon>
-                <ListItemText primary="ประวัติการบันทึกเวลา" />
-              </ListItem>
-            </Link>
-
-            <Divider />
-          </>
-        )} */}
-
-        <Link href="/timer" passHref>
+              <Link href="/panel/buildings" passHref>
           <ListItem
             button
-            className={router.pathname === "/timer" ? "Mui-selected" : ""}
+            className={router.pathname === "/panel/buildings" ? "Mui-selected" : ""}
           >
             <ListItemIcon>
-              <Timer10Icon />
+              <PlaceIcon />
             </ListItemIcon>
-            <ListItemText primary="เวลานับถอยหลัง" />
+            <ListItemText primary="จัดการข้อมูลอาคาร" />
+          </ListItem>
+        </Link>
+        
+        <Link href="/panel/users" passHref>
+          <ListItem
+            button
+            className={router.pathname === "/panel/users" ? "Mui-selected" : ""}
+          >
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <ListItemText primary="จัดการข้อมูลสมาชิก" />
           </ListItem>
         </Link>
 
-        <Link href="/stopwatch" passHref>
-          <ListItem
-            button
-            className={router.pathname === "/stopwatch" ? "Mui-selected" : ""}
-          >
-            <ListItemIcon>
-              <TimerIcon />
-            </ListItemIcon>
-            <ListItemText primary="จับเวลา" />
-          </ListItem>
-        </Link>
         <Divider />
 
-        {/* {userData && !userData.token && (
-          <>
-            <Link href="/auth/signin" passHref>
-              <ListItem
-                button
-                className={
-                  router.pathname === "/auth/signin" ? "Mui-selected" : ""
-                }
-              >
-                <ListItemIcon>
-                  <LoginIcon />
-                </ListItemIcon>
-                <ListItemText primary="เข้าระบบ (กรรมการ)" />
-              </ListItem>
-            </Link>
-          </>
-        )} */}
+<Link href="/timer" passHref>
+          <ListItem
+            button
+            className={router.pathname === "/" ? "Mui-selected" : ""}
+          >
+            <ListItemIcon>
+              <NavigationIcon />
+            </ListItemIcon>
+            <ListItemText primary="ระบบนำทาง" />
+          </ListItem>
+        </Link>
+
+
       </List>
     </Drawer>
   );
