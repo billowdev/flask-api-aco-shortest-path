@@ -89,13 +89,13 @@ const userSlice = createSlice({
 		});
 		builder.addCase(getSession.fulfilled, (state, action) => {
 			state.isAuthenticating = false;
-			if (action.payload.success) {
+			if (action.payload) {
 				state.accessToken = action.payload.access_token
 				state.isAuthenticated = true;
 			}
 		});
 		builder.addCase(getSession.rejected, (state, action) => {
-			state.isAuthenticating = true;
+			state.isAuthenticating = false;
 			state.isAuthenticated = false;
 			state.accessToken = "";
 			state.user = undefined;

@@ -62,9 +62,9 @@ const getSession = async (req: NextApiRequest, res: NextApiResponse<any>) => {
 			});
 			res.status(200).json(response.data);
 		} else {
-			res.json({ success: false, msg: "something wentwrong" });
+			res.status(400).json({ success: false, msg: "token not found" });
 		}
 	} catch (error: any) {
-		res.json({ success: false, msg: "something wentwrong" });
+		res.status(500).json({ success: false, msg: "something wentwrong" });
 	}
 }
