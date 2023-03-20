@@ -36,16 +36,6 @@ export interface BuildingPayloadC {
   
 
 
-type Props = {
-  building: BuildingPayload;
-  allBuildings: BuildingPayload[]
-  // building: BuildingPayloadC;
-  // allBuildings: BuildingPayloadC[]
-};
-
-
-
-
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
   ssr: false, // disable server-side rendering
@@ -64,13 +54,13 @@ const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), {
 
 
 
-const Edit = ({ building, allBuildings }: Props) => {
+const AddBuilding = () => {
 
 
   
 
 
-  const [currentLatLng, setCurrentLatLng] = React.useState<[number, number]>([parseFloat(building.lat), parseFloat(building.lng)]);
+  const [currentLatLng, setCurrentLatLng] = React.useState<[number, number]>([17.18898481078793, 104.0896523550969]);
   const center: LatLngExpression = [currentLatLng[0], currentLatLng[1]];
   const zoom: number = 16;
 
@@ -93,7 +83,7 @@ const Edit = ({ building, allBuildings }: Props) => {
         <Card>
           <CardContent sx={{ padding: 4 }}>
             <Typography gutterBottom variant="h3">
-              แก้ไขข้อมูลอาคาร
+             เพิ่มข้อมูลอาคาร
             </Typography>
             <Field
               style={{ marginTop: 16 }}
@@ -104,7 +94,6 @@ const Edit = ({ building, allBuildings }: Props) => {
               label="รหัสอาคาร/โหนด"
             />
    
-
             <Field
               style={{ marginTop: 16 }}
               fullWidth
@@ -159,7 +148,7 @@ const Edit = ({ building, allBuildings }: Props) => {
               type="submit"
               sx={{ marginRight: 1 }}
             >
-              แก้ไข
+              เพิ่ม
             </Button>
             <Link href="/panel/buildings" passHref>
               <Button variant="outlined" fullWidth>
@@ -185,29 +174,22 @@ const Edit = ({ building, allBuildings }: Props) => {
           return errors;
         }}
         initialValues={{
-          name: building.name,
-          desc: building.desc,
-          bid: building.bid,
-          image: building.image,
-          id: building.id,
-          is_node: building.is_node,
-          lat: building.lat,
-          lng:building.lng
+          name: "",
+          desc:"",
+          bid: "",
+          image: "",
+          is_node: false,
+          lat: "",
+          lng:""
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          const newLat = (currentLatLng[0]).toString();
-          const newLng = (currentLatLng[1]).toString() 
-          const newUpdateLatLng = {
-            ...values, 
-            ...{lat:newLat}, 
-            ...{lng:newLng}
-          }
-          const updateStatus = await dispatch(updateBuilding(newUpdateLatLng))
+       
+        //   const createStatus = await dispatch(createBuilding(newUpdateLatLng))
           // console.log(newUpdateLatLng)
           // console.log(newUpdateLatLng)
           // console.log("=================")
           if (updateStatus.meta.requestStatus === "fulfilled") {
-            toast.success("แก้ไขข้อมูลอาคารสำเร็จ")
+            toast.success("เพิ่มข้อมูลอาคารสำเร็จ")
             router.push("/panel/buildings")
           }
           setSubmitting(false);
@@ -225,50 +207,9 @@ const Edit = ({ building, allBuildings }: Props) => {
         >     
 
           <Popup autoClose={false}>
-        <span>โหนดที่กำลังแก้ไข</span>
+        <span>โหนด</span>
       </Popup></Marker> 
 
-
-      {/* {allBuildings
-      .map(({ bid, name, desc, lat, lng, image }) => (
-              <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}>
-                <Popup>
-                  <div>
-                    <h3>{bid}</h3>
-                    <h3>{name}</h3>
-                    <p>{desc}</p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))} */}
-
-              {/* {
-                allBuildings
-                .filter(bd => bd.bid !== building.bid)
-                .map(({ bid, name, desc, lat, lng, image }) => (
-                  <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}>
-                    <Popup key={bid}>
-                      <div>
-                        <h3>{bid}</h3>
-                        <h3>{name}</h3>
-                        <p>{desc}</p>
-                      </div>
-                    </Popup>
-                  // </Marker>
-                ))
-              } */}
-
-{/* {allBuildings.map(({ bid, name, desc, lat, lng, image }) => (
-        <Marker key={bid} position={[parseFloat(lat), parseFloat(lng)]}  icon={redIcon ?? undefined}>
-          <Popup>
-            <div>
-              <h3>{bid}</h3>
-              <h3>{name}</h3>
-              <p>{desc}</p>
-            </div>
-          </Popup>
-        </Marker>
-      ))} */}
       </MapContainer>
 
       
@@ -277,22 +218,4 @@ const Edit = ({ building, allBuildings }: Props) => {
   );
 };
 
-export default withAuth(Edit);
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const { dataId }: any = context.query;
-  if (dataId) {
-    const building = await getBuilding(dataId);
-    const allBuildings = await getBuildings();
-    return {
-      props: {
-        building,
-        allBuildings
-      },
-    };
-  } else {
-    return { props: {} };
-  }
-};
+export default withAuth(AddBuilding);

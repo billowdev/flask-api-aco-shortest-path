@@ -34,7 +34,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TransitionProps } from "@mui/material/transitions";
 import Link from "next/link";
-// import Add from "./add";
+import AddBuilding from "./add";
 import AddIcon from "@mui/icons-material/Add";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import { stringify } from "querystring";
@@ -56,7 +56,7 @@ const CustomToolbar: React.FunctionComponent<{
 }> = ({ setFilterButtonEl }) => (
   <GridToolbarContainer>
     <GridToolbarFilterButton ref={setFilterButtonEl} />
-    <Link href="/team/add" passHref>
+    <Link href="/panel/buildings/add" passHref>
       <Fab
         color="primary"
         aria-label="add"
@@ -101,19 +101,19 @@ const BuildingPage = ({ }: Props) => {
       >
         <DialogTitle id="alert-dialog-slide-title">
           <br />
-          Confirm to delete the team? : {selectedBuilding.name}
+          คุณต้องการลบข้อมูลใช่หรือไม่? : {selectedBuilding.name}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            You cannot restore deleted team.
+            คุณจะไม่สามารถกู้คืนข้อมูลได้หากลบข้อมูลแล้ว
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)} color="info">
-            Cancel
+            ยกเลิก
           </Button>
           <Button onClick={handleDeleteConfirm} color="primary">
-            Delete
+            ลบ
           </Button>
         </DialogActions>
       </Dialog>
