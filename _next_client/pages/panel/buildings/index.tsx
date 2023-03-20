@@ -187,7 +187,7 @@ const BuildingPage = ({ }: Props) => {
           <IconButton
             aria-label="edit"
             size="large"
-            onClick={() => router.push("/building/edit?id=" + row.id)}
+            onClick={() => router.push("/panel/buildings/edit?dataId=" + row.id)}
           >
             <EditIcon fontSize="inherit" />
           </IconButton>

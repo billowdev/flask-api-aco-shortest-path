@@ -73,7 +73,11 @@ def login():
                 identity=user.id, 
                 additional_claims={'role': user.role.value}
                 )
-            access_token: str = create_access_token(identity=user.id, additional_claims={'role': user.role.value})
+            access_token: str = create_access_token(
+                identity=user.id, 
+                                                    additional_claims={'role': user.role.value},  
+                                                    expires_delta=datetime.timedelta(hours=24)
+                                                    )
 
             return jsonify({
                 'user': {
@@ -98,7 +102,7 @@ def get_session():
         token = auth_header.split(" ")[1]
         current_user_id = get_jwt_identity()
         payload = jwt.decode(token, current_app.config['JWT_SECRET_KEY'], algorithms=['HS256'], options={'verify_exp': True})
-        access_token = create_access_token(identity=current_user_id, additional_claims={'role':payload['role']})
+        access_token = create_access_token(identity=current_user_id, additional_claims={'role':payload['role']},  expires_delta=datetime.timedelta(hours=24))
         return jsonify({
             "message": "get session",
             "payload": {

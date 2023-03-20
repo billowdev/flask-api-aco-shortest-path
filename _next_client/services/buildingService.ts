@@ -1,11 +1,5 @@
 import { BuildingPayload } from "@/models/building.model";
 import httpClient from "@/utils/httpClient.util";
-import { ForkedTask } from "@reduxjs/toolkit";
-
-import {
-	ACCESS_TOKEN_KEY,
-} from "@/utils/constant.util";
-
 
 
 export const getBuildings = async (): Promise<BuildingPayload[]> => {
@@ -14,8 +8,8 @@ export const getBuildings = async (): Promise<BuildingPayload[]> => {
 };
 
 export const getBuilding = async (id: string) => {
-	const response = await httpClient.get(`/buildings/${id}`);
-	return response.data;
+	const {data: response} = await httpClient.get(`/buildings/get/${id}`);
+	return response.payload;
 };
 
 export const createBuilding = async (data: BuildingPayload): Promise<any> => {
@@ -23,7 +17,9 @@ export const createBuilding = async (data: BuildingPayload): Promise<any> => {
 };
 
 export const updateBuilding = async (data: any): Promise<void> => {
-	await httpClient.put(`/buildings/update/${data.id}`, data);
+	await httpClient.patch(`/buildings/${data.id}`, data, {
+		baseURL: process.env.NEXT_PUBLIC_BASE_URL_LOCAL_API,
+	});
 };
 
 

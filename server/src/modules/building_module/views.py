@@ -242,6 +242,33 @@ def handle_get_all_buildings():
         "payload": data
     }), HTTP_200_OK
 
+@building_bp.route("/get/<int:id>", methods=["GET"])
+def handle_get_building_by_id(id: int):
+    building = BuildingModel.query.filter_by(id=id).first()
+
+    if building:
+        data = {
+            'id': building.id,
+            'name': building.name,
+            'bid': building.bid,
+            'image': building.image,
+            'is_node': building.is_node,
+            'desc': building.desc,
+            'lat': building.lat,
+            'lng': building.lng,
+        }
+
+        return jsonify({
+            "msg": "get building successfully",
+            "payload": data
+        }), HTTP_200_OK
+    else:
+        return jsonify({
+            "msg": f"building with id {id} not found",
+            "payload": {}
+        }), HTTP_404_NOT_FOUND
+
+
 @building_bp.route("/get/all/node", methods=["GET"])
 def handle_get_node_buildings():
     buildings = BuildingModel.query.filter_by(is_node=True).all()
@@ -336,8 +363,8 @@ def handle_update_building(building_id):
     if not building:
         return jsonify({'message': 'Building not found'}), HTTP_404_NOT_FOUND
 
-    payload = request.get_json().get('payload', '')
-
+    payload = request.get_json()
+    print(payload)
     # Update building fields
     try:
         if request.method == 'PUT':

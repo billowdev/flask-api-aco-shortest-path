@@ -9,7 +9,7 @@ interface BuildingState {
 }
 
 const initialState: BuildingState = {
-	buildings: []
+  buildings: []
 };
 
 export const getBuilding = createAsyncThunk(
@@ -26,7 +26,7 @@ export const getBuildings = createAsyncThunk(
   }
 );
 
-export const updateBuilding= createAsyncThunk(
+export const updateBuilding = createAsyncThunk(
   "buildings/update",
   async (data: any) => {
     await buildingService.updateBuilding(data);
