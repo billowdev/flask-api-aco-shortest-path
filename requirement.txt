@@ -9,3 +9,4 @@ argon2-cffi
 flask_mail
 numpy
 flask-cors
+
