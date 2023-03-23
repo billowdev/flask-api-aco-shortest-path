@@ -293,7 +293,7 @@ def handle_get_node_buildings():
 
 
 @building_bp.post("/create")
-# @jwt_required()
+@jwt_required()
 def handle_create_buildings():
     current_user_id = get_jwt_identity()
     user = UserModel.query.filter_by(id=current_user_id).first()
@@ -416,6 +416,10 @@ def handle_delete_building(building_id):
         return jsonify({'message': 'Forbidden'}), HTTP_403_FORBIDDEN
 
     building = BuildingModel.query.filter_by(id=building_id).first()
+    try:
+        os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], 'buildings', building.image))
+    except:
+        pass
     if not building:
         return jsonify({'message': 'Building not found'}), HTTP_404_NOT_FOUND
 
