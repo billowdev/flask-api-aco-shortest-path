@@ -13,6 +13,7 @@ from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from os import path
 from flask_cors import CORS
+from sqlalchemy import text
 
 
 def create_app():
@@ -72,14 +73,8 @@ def create_app():
     # create database tables
     with app.app_context():
         if app.config['ENV'] == 'development':
-            # drop tables individually
-            # for table in reversed(db.metadata.sorted_tables):
-            #     table_names = db.engine.table_names()
-            #     for table_name in table_names:
-            #         db.session.execute(f"DROP TABLE IF EXISTS {table_name}")
-            # create new tables
-            db.session.execute('DROP SCHEMA public CASCADE;')
-            db.session.execute('CREATE SCHEMA public;')
+            db.session.execute(text('DROP SCHEMA public CASCADE;'))
+            db.session.execute(text('CREATE SCHEMA public;'))
             db.session.commit()
             print('Dropped all tables was successfully!')
             db.create_all()
