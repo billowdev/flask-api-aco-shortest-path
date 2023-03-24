@@ -9,6 +9,7 @@ from .modules.building_module import building_bp
 from .modules.user_module import user_bp
 from .config import common_config
 from .database.seeders import seeders
+from .database.seeders import production_seeder
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from os import path
@@ -84,11 +85,12 @@ def create_app():
         elif app.config['ENV'] == 'testing' and not app.testing:
             raise ValueError(
                 "Testing database can only be created when app is testing")
-        else:
+        elif app.config['ENV'] == 'production':
             db.create_all()
             # seed the building table
-            with suppress(BaseException):
-                building_seeder.seed()
+            ## run in first time for create simulate or seeder data
+            # with suppress(BaseException):
+            #     production_seeder.run_seed()
 
             
     # @app.get("/")
