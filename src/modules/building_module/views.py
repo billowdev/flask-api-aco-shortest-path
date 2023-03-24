@@ -321,6 +321,12 @@ def handle_create_buildings():
                 image_filename = unique_filename
         else:
             image_filename = None
+        is_node = True
+        if 'is_node' in payload:
+            if(payload.get('is_node') == 'true'):
+                is_node = True
+            else:
+                is_node = False
 
         building = BuildingModel(
             bid=payload.get('bid'),
@@ -328,6 +334,7 @@ def handle_create_buildings():
             desc=payload.get('desc'),
             lat=payload.get('lat'),
             lng=payload.get('lng'),
+            is_node=is_node,
             image=image_filename
         )
 
