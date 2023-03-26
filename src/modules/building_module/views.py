@@ -305,7 +305,6 @@ def handle_create_buildings():
 
     if BuildingModel.query.filter_by(bid=request.form.get('bid')).first():
         return jsonify({'message': 'Building or that node is already exists'}), HTTP_409_CONFLICT
-
     try:
         # check if image is included in request files
         if 'file' in request.files:
@@ -327,8 +326,18 @@ def handle_create_buildings():
                 is_node = True
             else:
                 is_node = False
-
+        
+        # Get the maximum ID value from the database
+        max_id = db.session.query(db.func.max(BuildingModel.id)).scalar()
+        # for handle some thing wrong with seeder that miss math
+        # If there are no existing objects, start at 1
+        if not max_id:
+            new_id = 1
+        else:
+            new_id = max_id + 1
+        
         building = BuildingModel(
+            id=new_id,
             bid=payload.get('bid'),
             name=payload.get('name'),
             desc=payload.get('desc'),
