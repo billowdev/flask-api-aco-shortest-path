@@ -2,11 +2,10 @@ Flask
 Flask-SQLAlchemy
 validators
 psycopg2
-mysqlclient
 flask-jwt-extended
 python-dotenv
 argon2-cffi
 flask_mail
 numpy
 flask-cors
-
+psycopg2
