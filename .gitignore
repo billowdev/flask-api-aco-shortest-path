@@ -5,3 +5,6 @@ public/uploads/*
 
 src/database/seeders/production_seeder.py
 production_seeder.py
+
+sa/.idea
+./sa/.idea
