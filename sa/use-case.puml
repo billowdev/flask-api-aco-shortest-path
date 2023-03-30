@@ -1,22 +1,43 @@
 @startuml
 
+
+left to right direction
+package "Use Case Diagram" {
 actor Admin
 actor User
+rectangle "system boundary"{
 
-package "Use Case Diagram of SNRU Navigation System" {
+usecase "Manage building" as Building
+usecase "Authentication" as UserAccount
+usecase Login
 
-usecase Building
-usecase UserAccount
-usecase Navigation
+usecase "Use navigation" as Navigation
+usecase "select target node" as selectTargetNodeNavigation
+usecase "start navigation" as startNodeNavigation
+usecase "view building" as viewBuilding
+usecase "create building" as createBuilding
+usecase "update building" as updateBuilding
+usecase "delete building" as deleteBuilding
 
-Admin -- UserAccount : "จัดการ"
-Admin -- Building : "จัดการ"
+UserAccount <.. Login : "extends"
 
-Navigation -- User : "ใช้"
+Admin -- UserAccount : "manage"
+Admin -- Building : "manage"
 
-Navigation ..> Building : "ประกอบไปด้วย"
+'Navigation -- User
 
+Navigation ..> Building : "include"
+Navigation <.. selectTargetNodeNavigation : "extends"
+Navigation <.. startNodeNavigation : "extends"
 
+viewBuilding ..> Building : "include""
+Building ..>  createBuilding : "extends"
+Building ..>  updateBuilding : "extends"
+Building ..>  deleteBuilding : "extends"
+
+User -- startNodeNavigation
+User -- selectTargetNodeNavigation
+}
 }
 
 @enduml

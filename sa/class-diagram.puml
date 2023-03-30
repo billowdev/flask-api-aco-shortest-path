@@ -1,6 +1,6 @@
 @startuml
 
-package "Class Diagram  of SNRU Navigation System" {
+package "Class Diagram" {
 
 class UserAccount {
     - id : string
@@ -8,8 +8,8 @@ class UserAccount {
     - surname : string
     - username : string
     - password : string
-    - role : RoleEnum
-
+        + login(credential) : object
+        + session() : object
         + getOne() : object
         + getAll() : object
         + create() : object
@@ -17,10 +17,6 @@ class UserAccount {
         + delete() : void
 }
 
-Enum RoleEnum {
-    - Admin
-    - User
-}
 
 class Building {
     - id : string
@@ -34,12 +30,15 @@ class Building {
     + create() : object
     + update() : void
     + delete() : void
+    + findNearest(latLng) : object
+    + navigate({bid_start, goal}) : object
+    + uploadImage(file): void
 }
 
 }
 
 
-UserAccount -- RoleEnum : "has"
+UserAccount "1" -right- "*" Building
 
 
 @enduml
