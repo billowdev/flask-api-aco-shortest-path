@@ -4,7 +4,7 @@ pip install -r requirement.txt
 
 ### send mail SMTP, SendGrid, or Amazon SES
 
-##### in this repo that use Amazon SES
+##### for use Amazon SES
 
 - To use flask_mail with Amazon SES, you will need to configure your application to use the Amazon SES SMTP interface. Here's how you can do it
 ```bash
